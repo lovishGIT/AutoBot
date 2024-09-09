@@ -1,0 +1,8 @@
+created react app ->
+    npm create vite@latest frontend
+    npm i react-router-dom axios
+
+created express app ->
+    npm i express mongoose dotenv cors bcryptjs
+
+
