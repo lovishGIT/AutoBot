@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from "axios";
+import { UserContext } from '../../context/user.context';
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterForm () {
     const [firstName, setFirstName] = useState('');
@@ -8,6 +10,9 @@ export default function RegisterForm () {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [termsAndConditions, setTermsAndConditions] = useState(false);
+
+    const { setUser } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,8 +31,10 @@ export default function RegisterForm () {
                 },
             });
             console.log('Registration successful:', response.data);
+            setUser(response.data);
+            navigate('/');
         } catch (error) {
-            console.error('Registration failed:', error);
+            console.error('Registration failed:', error.response.data);
         }
     };
 

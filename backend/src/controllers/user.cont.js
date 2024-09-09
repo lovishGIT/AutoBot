@@ -35,16 +35,15 @@ export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) return res
-            .status(400)
-            .json("Please Fill All Details.");
+        .status(400)
+        .json("Please Fill All Details.");
 
-        // console.log(email, password);
 
 
         const findUser = await User.findOne({ email });
         if (!findUser) return res
-            .status(404)
-            .json("User Not Found! Please Register.");
+        .status(404)
+        .json("User Not Found! Please Register.");
 
         const checkPass = await bcrypt.compare(password, findUser.password);
         if (!checkPass) {

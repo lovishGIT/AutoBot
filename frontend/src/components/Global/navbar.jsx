@@ -1,6 +1,14 @@
+import React, { useContext } from 'react'
 import Logo from "../../assets/logo.png";
+import { UserContext } from '../../context/user.context';
+import { toast } from 'react-toastify';
 
 export default function Navbar() {
+    const { user, signOutUser } = useContext(UserContext);
+    const handleSignOut = () => {
+        signOutUser();
+        toast.success("Successfully Logged Out!");
+    }
     return (
         <nav className="shadow-lg">
             <div className="container mx-auto px-4 py-3">
@@ -14,7 +22,9 @@ export default function Navbar() {
                         <a href="#" className="text-gray-700 hover:text-[#042d76] hover:underline mr-4">About</a>
                         <a href="/playground" className="text-gray-700 hover:text-[#042d76] hover:underline mr-4">Playground</a>
                         <a href="#" className="text-gray-700 hover:text-[#042d76] hover:underline mr-4">Contact</a>
-                        <a href="/login" className="text-gray-700 hover:text-[#042d76] hover:underline mr-4">Login</a>
+                        {user?.fullName ? <button onClick={handleSignOut}>Sign Out</button>
+                            : <a href="/login" className="text-gray-700 hover:text-[#042d76] hover:underline mr-4">Login</a>
+                        }
                     </div>
                 </div>
             </div>
