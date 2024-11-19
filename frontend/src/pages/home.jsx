@@ -3,7 +3,7 @@ import MasterHome from "../components/Home/master";
 import DefaultLayout from "../layouts/defaultLayout";
 import TestimonialSlider from '../components/Home/testimonial';
 import { UserContext } from '../context/user.context';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 export default function Home() {
     const { user } = useContext(UserContext);
