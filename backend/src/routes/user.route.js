@@ -1,9 +1,23 @@
-import express from "express";
-import * as userCont from "../controllers/user.cont.js";
+import express from 'express';
+import {
+    registerUser,
+    loginUser,
+    getCurrentUser,
+    updateUser,
+    verifyToken,
+    logoutUser,
+} from '../controllers/user.cont.js';
+import verifyJWT from '../middlewares/auth.middleware.js';
 
-const userRouter = express.Router();
+const router = express.Router();
 
-userRouter.post('/register', userCont.registerUser);
-userRouter.post('/login', userCont.loginUser);
+router.post('/register', registerUser);
+router.post('/login', loginUser);
+router.get('/me', verifyJWT, getCurrentUser);
+router.patch('/update', verifyJWT, updateUser);
 
-export default userRouter;
+router.get('/logout', verifyJWT, logoutUser);
+
+router.get('/verify', verifyJWT, verifyToken);
+
+export default router;

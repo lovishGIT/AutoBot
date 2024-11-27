@@ -1,11 +1,33 @@
 import express from 'express';
-import * as ticket from '../controllers/ticket.cont.js';
+import {
+    createTicket,
+    getProjectTickets,
+    getTicketById,
+    updateTicket,
+    deleteTicket,
+    addComment,
+    updateComment,
+    deleteComment,
+} from '../controllers/ticket.cont.js';
+import verifyJWT from '../middlewares/auth.middleware.js';
 
-const ticketRouter = express.Router();
+const router = express.Router();
 
-ticketRouter.route('/tickets').post(ticket.createTicket);
-ticketRouter.route('/tickets/:id').delete(ticket.deleteTicket);
-ticketRouter.route('/playground/:projectId/tickets').get(ticket.getAllTickets);
-ticketRouter.route('/playground/:projectId/tickets/:id').get(ticket.getTicketById);
+router.post('/', createTicket);
+router.get('/', getProjectTickets);
+router.get('/:ticketId', getTicketById);
+router.patch('/:ticketId', updateTicket);
+router.delete('/:ticketId', deleteTicket);
 
-export default ticketRouter;
+// Comment routes
+router.post('/:ticketId/comments', addComment);
+router.patch(
+    '/:ticketId/comments/:commentId',
+    updateComment
+);
+router.delete(
+    '/:ticketId/comments/:commentId',
+    deleteComment
+);
+
+export default router;

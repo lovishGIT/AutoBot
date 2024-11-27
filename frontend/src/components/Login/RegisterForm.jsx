@@ -1,125 +1,136 @@
 import React, { useContext, useState } from 'react';
-import axios from "axios";
+import {
+    ArrowRight,
+    Lock,
+    Mail,
+    User,
+    Eye,
+    EyeOff,
+} from 'lucide-react';
 import { UserContext } from '../../context/user.context';
-import { useNavigate } from 'react-router-dom';
 
-export default function RegisterForm () {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [termsAndConditions, setTermsAndConditions] = useState(false);
 
-    const { setUser } = useContext(UserContext);
-    const navigate = useNavigate();
+const RegisterForm = ({ showPassword, setShowPassword }) => {
+    const { signUp, isLoading } = useContext(UserContext);
+    const [registerData, setRegisterData] = useState({
+        fullName: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+    });
 
-    const handleSubmit = async (e) => {
+    const handleRegisterChange = (e) => {
+        const { name, value } = e.target;
+        setRegisterData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleRegister = async (e) => {
         e.preventDefault();
-        if (password != confirmPassword) {
-            console.error("password not same.")
+
+        // Basic password validation
+        if (registerData.password !== registerData.confirmPassword) {
+            // Toast error would be handled in context
+            return;
         }
-        const formData = {
-            fullName: firstName.trim() + ' ' + lastName.trim(),
-            email, password
-        }
-        const url = 'http://localhost:3000/api/user/register';
+
         try {
-            const response = await axios.post(url, formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+            await signUp({
+                fullName: registerData.fullName,
+                email: registerData.email,
+                password: registerData.password,
             });
-            console.log('Registration successful:', response.data);
-            setUser(response.data);
-            navigate('/');
+            // Redirect or handle successful registration
         } catch (error) {
-            console.error('Registration failed:', error.response.data);
+            // Error handled in context
         }
     };
 
     return (
-        <form className="w-full" onSubmit={handleSubmit}>
-            <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">
-                    First Name
+        <form onSubmit={handleRegister} className="w-full space-y-6">
+            <div>
+                <label className="block text-gray-400 mb-2 flex items-center">
+                    <User className="mr-2 text-blue-500" size={20} />
+                    Full Name
                 </label>
                 <input
                     type="text"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    placeholder="First Name"
+                    name="fullName"
+                    required
+                    value={registerData.fullName}
+                    onChange={handleRegisterChange}
+                    className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter your full name"
                 />
             </div>
-            <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">
-                    Last Name
-                </label>
-                <input
-                    type="text"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    placeholder="Last Name"
-                />
-            </div>
-            <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">
-                    Email
+            <div>
+                <label className="block text-gray-400 mb-2 flex items-center">
+                    <Mail className="mr-2 text-blue-500" size={20} />
+                    Email Address
                 </label>
                 <input
                     type="email"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
+                    name="email"
+                    required
+                    value={registerData.email}
+                    onChange={handleRegisterChange}
+                    className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter your email"
                 />
             </div>
-            <div className="mb-6">
-                <label className="block text-gray-700 font-bold mb-2">
+            <div>
+                <label className="block text-gray-400 mb-2 flex items-center">
+                    <Lock className="mr-2 text-blue-500" size={20} />
                     Password
                 </label>
                 <input
-                    type="password"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    required
+                    value={registerData.password}
+                    onChange={handleRegisterChange}
+                    className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Create a strong password"
                 />
+                <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                >
+                    {showPassword ? (
+                        <EyeOff size={20} />
+                    ) : (
+                        <Eye size={20} />
+                    )}
+                </button>
             </div>
-            <div className="mb-6">
-                <label className="block text-gray-700 font-bold mb-2">
+            <div>
+                <label className="block text-gray-400 mb-2 flex items-center">
+                    <Lock className="mr-2 text-blue-500" size={20} />
                     Confirm Password
                 </label>
                 <input
-                    type="password"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    value={confirmPassword}
-                    onChange={(e) =>
-                        setConfirmPassword(e.target.value)
-                    }
-                    placeholder="Confirm Password"
+                    type={showPassword ? 'text' : 'password'}
+                    name="confirmPassword"
+                    required
+                    value={registerData.confirmPassword}
+                    onChange={handleRegisterChange}
+                    className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Confirm your password"
                 />
-            </div>
-            <div className="mb-6 flex gap-2 items-center">
-                <input
-                    type="checkbox"
-                    id="termsAndConditionsCheckbox"
-                    className="shadow border-black rounded w-[15px] h-[15px] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    defaultChecked={termsAndConditions}
-                    onClick={() => setTermsAndConditions(!termsAndConditions)}
-                />
-                <label htmlFor="termsAndConditionsCheckbox" className={`block text-gray-700 font-bold mb-2 ${!termsAndConditions ? 'text-red-500' : ''}`}>
-                    I agree to all the Terms and Conditions.
-                </label>
             </div>
             <button
-                className="bg-[#111f58] text-white text-lg w-[100%] py-2 px-2"
                 type="submit"
+                disabled={isLoading}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:opacity-90 transition flex items-center justify-center"
             >
-                Register
+                {isLoading ? 'Creating Account...' : 'Register'}
+                <ArrowRight className="ml-2" />
             </button>
         </form>
     );
 };
+
+export default RegisterForm;

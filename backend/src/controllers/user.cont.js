@@ -1,69 +1,133 @@
-import bcrypt from "bcryptjs";
-import User from "../models/user.model.js";
+import User from '../models/user.model.js';
+import generateToken from '../utils/generateToken.util.js';
 
+// @route   POST /api/users/register
 export const registerUser = async (req, res) => {
     try {
         const { fullName, email, password } = req.body;
-
-        if (!fullName || !email || !password) return res
-                .status(400)
-                .json({message: 'Please provide fullName, email and password'});
-
-        const user = await User.findOne({ email })
-        if (user) return res
-                .status(401)
-            .json({ message: 'User Already Registered! Please Login.' });
-
-        const newUser = await User.create({
-            fullName, email, password
-        });
-        await newUser.save();
-        const dataTobeShared = {
-            id: newUser._id,
-            fullName: newUser.fullName,
-            email: newUser.email,
-            createdAt: newUser.createdAt
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            return res.status(400).json({ message: 'User already exists' });
         }
-        return res.status(201).json(dataTobeShared);
+
+        const user = await User.create({
+            fullName,
+            email,
+            password
+        });
+        await generateToken(user, res);
+        if (user) {
+            return res
+                .status(201)
+                .json({
+                    _id: user._id,
+                    fullName: user.fullName,
+                    email: user.email,
+                }
+            );
+        } else {
+            return res.status(400).json({ message: 'Invalid user data' });
+        }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server error!' });
+        return res.status(500).json({ message: error.message });
     }
 };
 
+// @route   POST /api/users/login
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        if (!email || !password) return res
-        .status(400)
-        .json("Please Fill All Details.");
 
+        // Check for user
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User Not Found. Please Register.' });
+        }
 
-
-        const findUser = await User.findOne({ email });
-        if (!findUser) return res
-        .status(404)
-        .json("User Not Found! Please Register.");
-
-        const checkPass = await bcrypt.compare(password, findUser.password);
-        if (!checkPass) {
-            return res
-                .status(400)
-                .json("Wrong Password");
+        if (user && await user.correctPassword(password)) {
+            await generateToken(user, res);
+            return res.json({
+                _id: user._id,
+                fullName: user.fullName,
+                email: user.email,
+            });
         } else {
-            const dataTobeShared = {
-                id: findUser._id,
-                fullName: findUser.fullName,
-                email: findUser.email,
-                createdAt: findUser.createdAt
-            }
-            return res
-                .status(200)
-                .json(dataTobeShared);
+            return res.status(400).json({ message: 'Invalid credentials' });
         }
     } catch (error) {
-        console.error("Error", error);
-        return res.status(500).json("Internal Server Error.");
+        return res.status(500).json({ message: error.message });
     }
 };
 
+// @route   GET /api/users/me
+export const getCurrentUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).populate('projects');
+        return res.status(200).json(user);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+// @route   PATCH /api/users/update
+export const updateUser = async (req, res) => {
+    try {
+        if (!req.user._id || req.body) {
+            return res.status(400).json({ message: 'Invalid user data' });
+        }
+        const { fullName, email, password } = req.body;
+
+        let user;
+        if (password) {
+            user = await User.findByIdAndUpdate(
+                req.user._id,
+                { fullName, email, password },
+                { new: false, runValidators: true }
+            );
+        } else {
+            user = await User.findByIdAndUpdate(
+                req.user._id,
+                { fullName, email },
+                { new: true, runValidators: true }
+            );
+        }
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if(password) {
+            res.clearCookie('token');
+        }
+
+        return res.status(200).json({});
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+// @route   GET /api/users/logout
+export const logoutUser = async (req, res) => {
+    try {
+        if(!req.user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        req.user = null;
+        res.clearCookie('token');
+        return res.status(200).json({ message: 'User logged out successfully' });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+// @route   GET /api/users/verify
+export const verifyToken = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        return res.status(200).json(req.user);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};

@@ -1,5 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import emailValidator from 'email-validator';
 
 const userSchema = new Schema(
     {
@@ -7,17 +8,28 @@ const userSchema = new Schema(
             type: String,
             required: true,
             trim: true,
+            lowercase: true,
         },
         email: {
             type: String,
             required: true,
             trim: true,
             unique: true,
+            validate: {
+                validator: emailValidator.validate,
+                message: 'Invalid email format',
+            },
         },
         password: {
             type: String,
-            required: [true, "Password is required."],
-        }
+            required: [true, 'Password is required.'],
+        },
+        projects: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Project',
+            },
+        ],
     },
     { timestamps: true }
 );
@@ -30,5 +42,28 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-const User = mongoose.model('User', userSchema);
+userSchema.methods.correctPassword = async function (
+    candidatePassword
+) {
+    return await bcrypt.compare(candidatePassword, this.password);
+};
+
+userSchema.methods.toJSON = function () {
+    const userObject = this.toObject();
+    delete userObject.password;
+    delete userObject.passwordConfirm;
+    return userObject;
+};
+
+const User = model('User', userSchema);
 export default User;
+
+/*
+{
+    _id: '123456789',
+    fullName: 'John Doe',
+    email: 'john.doe@example.com',
+    password: 'securePassword123',
+    projects: ['683198189183013'], // projectId
+}
+*/

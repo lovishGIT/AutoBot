@@ -1,15 +1,61 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import User from './user.model.js';
 
-const projectSchema = new mongoose.Schema(
+const projectSchema = new Schema(
     {
-        projectName: {
+        name: {
             type: String,
+            trim: true,
+            default: 'Untitled Project',
+        },
+        owner: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
             required: true,
         },
-        description: String,
+        description: {
+            type: String,
+            trim: true,
+            default: 'No description provided',
+        },
+        link: [
+            {
+                type: String,
+            }
+        ],
+        resources: [
+            {
+                type: String,
+                trim: true,
+            }
+        ],
+        status: {
+            type: String,
+            enum: ['active', 'inactive', 'completed'],
+            default: 'active',
+        },
+        activities: [
+            {
+                type: String,
+                trim: true,
+            }
+        ],
     },
     { timestamps: true }
 );
 
-const Project =  mongoose.model('Project', projectSchema);
+projectSchema.pre('save', async function (next) {
+    if (this.isNew) {
+        const owner = await User.findById(this.owner);
+        if (!owner) {
+            const err = new Error('Owner not found');
+            return next(err);
+        }
+        const projCount = owner.projects.length;
+        this.name = `Project ${projCount + 1}`;
+    }
+    next();
+});
+
+const Project = model('Project', projectSchema);
 export default Project;

@@ -1,64 +1,103 @@
-import React, { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import {
+    ArrowRight,
+    Eye,
+    EyeOff,
+    Lock,
+    Mail,
+} from 'lucide-react';
+import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/user.context';
-import { useNavigate } from 'react-router-dom';
 
-export default function LoginForm() {
-    const { user, setUser } = useContext(UserContext);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+const LoginForm = ({ showPassword, setShowPassword }) => {
+    const { signIn, isLoading } = useContext(UserContext);
+    const [loginData, setLoginData] = useState({
+        email: '',
+        password: '',
+    });
 
-    const handleSubmit = async (e) => {
+
+    const handleLoginChange = (e) => {
+        const { name, value } = e.target;
+        setLoginData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleLogin = async (e) => {
         e.preventDefault();
-        const formData = { email, password };
-
-        const url = 'http://localhost:3000/api/user/login';
         try {
-            const response = await axios.post(url, formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            console.log('Login successful:', response.data);
-            setUser({ ...response.data });
-            navigate('/');
+            await signIn(loginData);
         } catch (error) {
-            console.error('Login failed:', error.response);
-            toast.error(error.response.data);
+            // Error handled in context
         }
     };
 
     return (
-        <>
-            <form className="w-full" onSubmit={handleSubmit}>
-                <div className="w-full mb-4">
-                    <label className="block text-gray-700 font-bold mb-2">
-                        Email
-                    </label>
+        <form onSubmit={handleLogin} className="w-full space-y-6">
+            <div className="relative">
+                <label className="block text-gray-400 mb-2 flex items-center">
+                    <Mail className="mr-2 text-blue-500" size={20} />
+                    Email Address
+                </label>
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    value={loginData.email}
+                    onChange={handleLoginChange}
+                    className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter your email"
+                />
+            </div>
+            <div className="relative">
+                <label className="block text-gray-400 mb-2 flex items-center">
+                    <Lock className="mr-2 text-blue-500" size={20} />
+                    Password
+                </label>
+                <div className="relative">
                     <input
-                        type="email"
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Email"
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        required
+                        value={loginData.password}
+                        onChange={handleLoginChange}
+                        className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter your password"
                     />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                    >
+                        {showPassword ? (
+                            <EyeOff size={20} />
+                        ) : (
+                            <Eye size={20} />
+                        )}
+                    </button>
                 </div>
-                <div className="mb-6">
-                    <label className="block text-gray-700 font-bold mb-2">
-                        Password
-                    </label>
-                    <input
-                        type="password"
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Password"
-                    />
-                </div>
-                <button className="bg-[#081547] text-white text-lg w-[100%] py-2 px-2" type='submit'>Login</button>
-            </form>
-        </>
+            </div>
+            <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:opacity-90 transition flex items-center justify-center"
+            >
+                {isLoading ? 'Logging In...' : 'Login'}
+                <ArrowRight className="ml-2" />
+            </button>
+            <div className="text-center">
+                <Link
+                    to="/forgot-password"
+                    className="text-blue-400 hover:underline"
+                >
+                    Forgot Password?
+                </Link>
+            </div>
+        </form>
     );
 };
+
+
+export default LoginForm;
