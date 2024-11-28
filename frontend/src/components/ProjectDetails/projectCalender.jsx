@@ -1,15 +1,14 @@
 import React from 'react';
-import { useProjectContext } from '../../context/project.context';
-import MonthNavigation from './MonthNavigation';
+import { useProject } from '@/hooks/project.hook';
+import MonthNavigation from './monthNavigation';
 
 const ProjectCalendar = () => {
     const { calendarDays, selectedMonth, setSelectedTicket } =
-        useProjectContext();
+        useProject();
 
     return (
         <div>
             <MonthNavigation />
-
             <div className="grid grid-cols-7 gap-2 bg-gray-900 p-4 rounded-lg">
                 {[
                     'Sun',

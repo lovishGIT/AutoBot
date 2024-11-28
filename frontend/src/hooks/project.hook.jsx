@@ -10,8 +10,6 @@ import { toast } from 'react-toastify';
 
 const ProjectContext = createContext();
 
-export const useProjectContext = () => useContext(ProjectContext);
-
 export const ProjectProvider = ({ children }) => {
     const API_URL = import.meta.env.API_URL;
     const { id: projectId } = useParams();
@@ -165,3 +163,8 @@ export const ProjectProvider = ({ children }) => {
         </ProjectContext.Provider>
     );
 };
+
+
+export const useProject = () => {
+    return useContext(ProjectContext);
+}

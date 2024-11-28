@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 // Create the UserContext
-export const UserContext = createContext({
+const UserContext = createContext({
     user: null,
     isAuthenticated: false,
     signUp: (userData) => {},
@@ -140,4 +140,8 @@ export const UserProvider = ({ children }) => {
             {!isLoading && children}
         </UserContext.Provider>
     );
+};
+
+export const useUser = () => {
+    return useContext(UserContext);
 };

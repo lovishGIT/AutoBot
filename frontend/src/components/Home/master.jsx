@@ -1,11 +1,10 @@
 import React from 'react';
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../../context/user.context';
+import { useUser } from '@/hooks/user.hook';
 import { ArrowRight } from 'lucide-react';
 
 const HeroSection = () => {
-    const { user } = useContext(UserContext);
+    const { user } = useUser();
 
     return (
         <div className="bg-gray-900 text-white pt-24 pb-16 h-[100vh] flex flex-col justify-center items-center">

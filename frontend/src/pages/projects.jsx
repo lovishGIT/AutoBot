@@ -19,9 +19,9 @@ import {
     TrendingUp,
     Briefcase,
 } from 'lucide-react';
-import ProjectSidebar from '../components/Project/projectSidebar';
-import { ProjectProvider } from '../context/project.context';
-import DefaultLayout from '../layouts/defaultLayout';
+import ProjectSidebar from '@/components/Project/projectSidebar';
+import { ProjectProvider } from '@/hooks/project.hook';
+import DefaultLayout from '@/layouts/defaultLayout';
 
 const UserProjectDashboard = () => {
     const professionalProjects = [

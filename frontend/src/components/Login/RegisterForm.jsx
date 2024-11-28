@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
     ArrowRight,
     Lock,
@@ -7,11 +7,12 @@ import {
     Eye,
     EyeOff,
 } from 'lucide-react';
-import { UserContext } from '../../context/user.context';
+import { useUser } from '@/hooks/user.hook';
+import { toast } from 'react-toastify';
 
 
 const RegisterForm = ({ setError, showPassword, setShowPassword }) => {
-    const { signUp, isLoading } = useContext(UserContext);
+    const { signUp, isLoading } = useUser();
     const [registerData, setRegisterData] = useState({
         fullName: '',
         email: '',
@@ -32,7 +33,7 @@ const RegisterForm = ({ setError, showPassword, setShowPassword }) => {
 
         // Basic password validation
         if (registerData.password !== registerData.confirmPassword) {
-            // Toast error would be handled in context
+            toast.error('Passwords do not match.');
             return;
         }
 

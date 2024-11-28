@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { useProjectContext } from '../../context/project.context';
+import { useProject } from '@/hooks/project.hook';
 
 const AddTicketModal = () => {
     const {
         isAddTicketModalOpen,
         setIsAddTicketModalOpen,
         handleAddTicket,
-    } = useProjectContext();
+    } = useProject();
 
     const [newTicket, setNewTicket] = useState({
         title: '',
@@ -29,7 +29,8 @@ const AddTicketModal = () => {
                 dueDate: '',
             });
         } catch (error) {
-            // Error handling is done in the context
+            // Error handling.
+            console.error(error);
         }
     };
 

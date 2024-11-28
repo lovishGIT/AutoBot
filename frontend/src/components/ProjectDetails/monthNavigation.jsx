@@ -1,5 +1,5 @@
 import React from 'react';
-import { useProjectContext } from '../../context/project.context';
+import { useProject } from '@/hooks/project.hook';
 
 const MonthNavigation = () => {
     const {
@@ -7,7 +7,7 @@ const MonthNavigation = () => {
         selectedYear,
         setSelectedMonth,
         setSelectedYear,
-    } = useProjectContext();
+    } = useProject();
 
     const changeMonth = (increment) => {
         const newDate = new Date(

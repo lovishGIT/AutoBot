@@ -5,12 +5,12 @@ import {
     Lock,
     Mail,
 } from 'lucide-react';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../../context/user.context';
+import { useUser } from '@/hooks/user.hook';
 
 const LoginForm = ({ setError, showPassword, setShowPassword }) => {
-    const { signIn, isLoading } = useContext(UserContext);
+    const { signIn, isLoading } = useUser();
     const [loginData, setLoginData] = useState({
         email: '',
         password: '',

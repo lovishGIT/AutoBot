@@ -5,7 +5,7 @@ import './App.css';
 import Home from './pages/home';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
-import { UserProvider } from './context/user.context';
+import { UserProvider } from './hooks/user.hook';
 import UserProjectDashboard from './pages/projects';
 import ProjectDetailsPage from './pages/projectDetails';
 import { ToastContainer } from 'react-toastify';

@@ -1,15 +1,13 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import {
     Rocket,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../../context/user.context';
+import { useUser } from '@/hooks/user.hook';
 import { toast } from 'react-toastify';
 
-// Navbar Component
 const Navbar = () => {
-    const { user, signOutUser } =
-        useContext(UserContext);
+    const { user, signOutUser } = useUser()
 
     const handleSignOut = () => {
         signOutUser();
