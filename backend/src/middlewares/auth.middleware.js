@@ -3,11 +3,14 @@ import jwt from 'jsonwebtoken';
 const { JWT_SECRET } = process.env;
 
 const verifyJWT = (req, res, next) => {
+
     const token =
-        req?.headers['authorization'] ||
         req?.cookies?.token ||
-        req?.headers?.cookie?.toString()?.split('token=')[1] ||
-        req?.headers['authorization']?.split('Bearer ')[1];
+        req?.headers?.cookie?.toString()?.split('token=')[1].split(';')[0] ||
+        req?.headers['authorization']?.split('Bearer ')?.[1] || req?.headers['authorization']?.split('Bearer ')?.[0];
+
+    // console.log(token);
+
 
     if (!token) {
         return res.status(401).json({ message: 'No token provided' });
@@ -17,6 +20,9 @@ const verifyJWT = (req, res, next) => {
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 
+    // console.log(token, JWT_SECRET);
+
+
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         if(!decoded) {
@@ -24,9 +30,10 @@ const verifyJWT = (req, res, next) => {
         }
 
         req.user = decoded;
-        console.log(req.user);
+        // console.log(req.user);
         next();
     } catch (error) {
+        console.error('Token verification failed', error);
         return res
             .status(401)
             .json({ message: 'Failed to authenticate token' });

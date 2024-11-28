@@ -8,7 +8,7 @@ const HeroSection = () => {
     const { user } = useContext(UserContext);
 
     return (
-        <div className="bg-gray-900 text-white pt-24 pb-16">
+        <div className="bg-gray-900 text-white pt-24 pb-16 h-[100vh] flex flex-col justify-center items-center">
             <div className="container mx-auto px-4 flex flex-col items-center text-center">
                 <h1 className="text-5xl font-bold mb-6 max-w-3xl">
                     {user?.fullName

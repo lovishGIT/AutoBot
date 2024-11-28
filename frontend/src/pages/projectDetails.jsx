@@ -1,7 +1,5 @@
 import React, { Suspense } from 'react';
 import { Loader2 } from 'lucide-react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import ProjectCalendar from '../components/ProjectDetails/projectCalender';
 import AddTicketModal from '../components/ProjectDetails/addTicket';
@@ -15,8 +13,6 @@ const ProjectDetailsPage = () => {
                 <CollapsibleSidebar />
 
                 <div className="flex-1 ml-20 p-8 text-white transition-all duration-300">
-                    <ToastContainer theme="dark" />
-
                     <Suspense
                         fallback={
                             <div className="flex justify-center items-center h-screen">

@@ -6,17 +6,15 @@ import { toast } from 'react-toastify';
 export const UserContext = createContext({
     user: null,
     isAuthenticated: false,
-    signUp: () => {},
-    signIn: () => {},
+    signUp: (userData) => {},
+    signIn: (credentials) => {},
     signOutUser: () => {},
     updateUserProfile: () => {},
     isLoading: false,
 });
 
-// API Base URL - adjust to your backend endpoint
 const API_BASE_URL = (import.meta.env.API_URL || 'http://localhost:3000') + '/api/users';
 
-// UserProvider Component
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,12 +26,10 @@ export const UserProvider = ({ children }) => {
 
     const checkAuthStatus = async () => {
         try {
-            const token = localStorage.getItem('token');
-            if (token) {
                 const response = await axios.get(
                     `${API_BASE_URL}/verify`,
                     {
-                        headers: { Authorization: `Bearer ${token}` },
+                        withCredentials: true
                     }
                 );
 
@@ -41,32 +37,28 @@ export const UserProvider = ({ children }) => {
                     setUser(response.data.user);
                     setIsAuthenticated(true);
                 }
-            }
         } catch (error) {
             console.error('Token verification failed', error);
-            localStorage.removeItem('token');
             setIsAuthenticated(false);
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Sign Up Function
     const signUp = async (userData) => {
         try {
             setIsLoading(true);
             const response = await axios.post(
                 `${API_BASE_URL}/register`,
-                userData
+                userData, {
+                    withCredentials: true
+                }
             );
 
-            console.log(response.data);
-            // Store token and set user
-            localStorage.setItem('token', response.data.token);
-            setUser(response.data.user);
+            setUser(response.data);
             setIsAuthenticated(true);
 
-            toast.success('Successfully registered!');
+            // toast.success('Successfully registered!');
             return response.data;
         } catch (error) {
             toast.error(
@@ -78,23 +70,21 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    // Sign In Function
     const signIn = async (credentials) => {
         try {
-            // console.log(credentials);
 
             setIsLoading(true);
             const response = await axios.post(
                 `${API_BASE_URL}/login`,
-                credentials
+                credentials, {
+                    withCredentials: true
+                }
             );
 
-            // Store token and set user
-            localStorage.setItem('token', response.data.token);
-            setUser(response.data.user);
+            setUser(response.data);
             setIsAuthenticated(true);
 
-            toast.success('Successfully logged in!');
+            // toast.success('Successfully logged in!');
             return response.data;
         } catch (error) {
             toast.error(
@@ -106,9 +96,7 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    // Sign Out Function
     const signOutUser = () => {
-        localStorage.removeItem('token');
         setUser(null);
         setIsAuthenticated(false);
         toast.info('Logged out successfully');
@@ -117,12 +105,10 @@ export const UserProvider = ({ children }) => {
     // Update User Profile
     const updateUserProfile = async (updatedData) => {
         try {
-            const token = localStorage.getItem('token');
             const response = await axios.put(
                 `${API_BASE_URL}/update`,
-                updatedData,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
+                updatedData, {
+                    withCredentials: true
                 }
             );
 

@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 import LoginForm from '../components/Login/LoginForm';
@@ -10,6 +9,7 @@ export default function Login() {
     const { isAuthenticated } = useContext(UserContext);
     const [pastUser, setPastUser] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
 
@@ -17,7 +17,6 @@ export default function Login() {
         if (isAuthenticated) {
             navigate('/', { replace: true });
         }
-        console.log(isAuthenticated);
     }, [isAuthenticated, navigate]);
 
     return (
@@ -68,20 +67,21 @@ export default function Login() {
                             Register
                         </button>
                     </div>
-
-                    {pastUser ? <LoginForm showPassword={showPassword} setShowPassword={setShowPassword} /> : <RegisterForm showPassword={showPassword} setShowPassword={setShowPassword} />}
+                    {pastUser ? (
+                        <LoginForm
+                            setError={setError}
+                            showPassword={showPassword}
+                            setShowPassword={setShowPassword}
+                        />
+                    ) : (
+                        <RegisterForm
+                            setError={setError}
+                            showPassword={showPassword}
+                            setShowPassword={setShowPassword}
+                        />
+                    )}
                 </div>
             </div>
-
-            <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                theme="dark"
-                closeOnClick
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
         </div>
     );
 };

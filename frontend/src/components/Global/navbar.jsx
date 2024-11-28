@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
     Rocket,
 } from 'lucide-react';
@@ -8,11 +8,11 @@ import { toast } from 'react-toastify';
 
 // Navbar Component
 const Navbar = () => {
-    const { user, signOutUser } = useContext(UserContext);
+    const { user, signOutUser } =
+        useContext(UserContext);
 
     const handleSignOut = () => {
         signOutUser();
-        // Assuming toast is imported and configured
         toast.success('Successfully Logged Out!');
     };
 

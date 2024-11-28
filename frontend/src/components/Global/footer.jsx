@@ -31,10 +31,10 @@ const Footer = () => {
                         </li>
                         <li>
                             <Link
-                                to="/playground"
+                                to="/projects"
                                 className="text-gray-300 hover:text-white"
                             >
-                                Playground
+                                Projects
                             </Link>
                         </li>
                         <li>

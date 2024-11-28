@@ -15,6 +15,9 @@ const generateToken = (user, res) => {
         secure: process.env.NODE_ENV === 'production',
     });
 
+    console.log("setting token ", token, "in cookie");
+
+
     return token;
 };
 

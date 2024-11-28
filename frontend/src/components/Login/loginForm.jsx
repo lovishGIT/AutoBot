@@ -9,13 +9,12 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/user.context';
 
-const LoginForm = ({ showPassword, setShowPassword }) => {
+const LoginForm = ({ setError, showPassword, setShowPassword }) => {
     const { signIn, isLoading } = useContext(UserContext);
     const [loginData, setLoginData] = useState({
         email: '',
         password: '',
     });
-
 
     const handleLoginChange = (e) => {
         const { name, value } = e.target;
@@ -30,7 +29,7 @@ const LoginForm = ({ showPassword, setShowPassword }) => {
         try {
             await signIn(loginData);
         } catch (error) {
-            // Error handled in context
+            setError('Login failed. Please try again.');
         }
     };
 

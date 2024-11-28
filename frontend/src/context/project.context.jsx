@@ -72,11 +72,7 @@ export const ProjectProvider = ({ children }) => {
                 const projectResponse = await axios.get(
                     `${API_URL}/api/projects/${projectId}`,
                     {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                'token'
-                            )}`,
-                        },
+                        withCredentials: true,
                     }
                 );
                 setProjectDetails(projectResponse.data);
@@ -85,11 +81,7 @@ export const ProjectProvider = ({ children }) => {
                 const ticketsResponse = await axios.get(
                     `${API_URL}/api/tickets/project/${projectId}`,
                     {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                'token'
-                            )}`,
-                        },
+                        withCredentials: true,
                     }
                 );
                 setTickets(ticketsResponse.data);
@@ -127,17 +119,11 @@ export const ProjectProvider = ({ children }) => {
     const handleAddTicket = async (ticketData) => {
         try {
             const response = await axios.post(
-                `${process.env.API_URL}/api/tickets/`,
-                {
+                `${import.meta.env.API_URL}/api/tickets/`, {
                     ...ticketData,
                     projectId: projectId,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            'token'
-                        )}`,
-                    },
+                }, {
+                    withCredentials: true,
                 }
             );
 

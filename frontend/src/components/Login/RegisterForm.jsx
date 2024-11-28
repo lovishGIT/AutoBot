@@ -10,7 +10,7 @@ import {
 import { UserContext } from '../../context/user.context';
 
 
-const RegisterForm = ({ showPassword, setShowPassword }) => {
+const RegisterForm = ({ setError, showPassword, setShowPassword }) => {
     const { signUp, isLoading } = useContext(UserContext);
     const [registerData, setRegisterData] = useState({
         fullName: '',
@@ -42,9 +42,8 @@ const RegisterForm = ({ showPassword, setShowPassword }) => {
                 email: registerData.email,
                 password: registerData.password,
             });
-            // Redirect or handle successful registration
         } catch (error) {
-            // Error handled in context
+            setError('Registration failed. Please try again.');
         }
     };
 
