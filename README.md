@@ -25,7 +25,7 @@ This project is an automation tool designed to streamline repetitive tasks and i
 
 ## Usage
 1. Setup .env file with the following variables:
-    For Frontend: 
+    For Frontend:
     ```sh
     VITE_API_URL= # BACKEND API URL
     ```
@@ -47,4 +47,4 @@ Contributions are welcome! Please fork the repository and create a pull request 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
-For any questions or suggestions, please open an issue or contact the project maintainer at [your-email@example.com](mailto:your-email@example.com).
+For any questions or suggestions, please open an issue or contact the project maintainer at [lovish bansal](mailto:lovishbansal441@gmail.com).
