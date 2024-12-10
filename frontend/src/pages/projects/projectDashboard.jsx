@@ -19,6 +19,7 @@ import {
     TrendingUp,
     Briefcase,
     ArrowLeft,
+    Plus,
 } from 'lucide-react';
 import ProjectSidebar from '@/components/Project/projectSidebar';
 import {
@@ -33,12 +34,14 @@ const ProjectDashboard = () => {
 
     const { projects, isLoading, error } = useProject();
     const userProjects = useMemo(
-        () => projects.filter((project) => project.owner === user.id),
-        [projects, user.id]
+        () =>
+            projects.filter((project) => project.owner === user._id),
+        [projects, user._id]
     );
     const others = useMemo(
-        () => projects.filter((project) => project.owner !== user.id),
-        [projects, user.id]
+        () =>
+            projects.filter((project) => project.owner !== user._id),
+        [projects, user._id]
     );
 
     if (isLoading) return <div>Loading...</div>;
@@ -173,11 +176,20 @@ const ProjectDashboard = () => {
 
                         {/* Your Projects Section */}
                         <div className="bg-gray-800 rounded-lg p-6 shadow-lg">
-                            <div className="flex items-center mb-4">
-                                <Folder className="mr-2 text-green-500" />
-                                <h2 className="text-xl font-semibold">
-                                    Your Projects
-                                </h2>
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center">
+                                    <Folder className="mr-2 text-green-500" />
+                                    <h2 className="text-xl font-semibold">
+                                        Your Projects
+                                    </h2>
+                                </div>
+                                <Link
+                                    to="/projects/add"
+                                    className="flex items-center px-3 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors text-sm"
+                                >
+                                    <Plus className="w-4 h-4 mr-1" />
+                                    Add Project
+                                </Link>
                             </div>
                             {userProjects.length > 0 ? (
                                 userProjects.map((project) => (

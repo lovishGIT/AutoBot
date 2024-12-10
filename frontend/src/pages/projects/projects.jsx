@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { UserContext } from '@/context/user.context';
 import { ProjectProvider } from '@/context/projects.context';
-import ProjectDashboard from './projectDetails';
+import ProjectDashboard from './projectDashboard';
+import AddProjectPage from './AddProject';
+import NotFound from '../NotFound';
+import SingleProjectPage from './singleProduct';
 
 const UserProjectDashboard = () => {
     const { user, isLoading } = useContext(UserContext);
@@ -10,7 +13,6 @@ const UserProjectDashboard = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Wait for auth check to complete before redirecting
         if (!user) {
             setError('You need to login to view projects');
             navigate('/login');
@@ -18,7 +20,7 @@ const UserProjectDashboard = () => {
     }, [user]);
 
     if (isLoading) {
-        return <div>Loading...</div>; // Show a loading state
+        return <div>Loading...</div>;
     }
 
     if (!user) {
@@ -31,7 +33,12 @@ const UserProjectDashboard = () => {
 
     return (
         <ProjectProvider>
-            <ProjectDashboard />
+            <Routes>
+                <Route path="/" element={<ProjectDashboard />} />
+                <Route path="/add" element={<AddProjectPage />} />
+                <Route path="/:id" element={<SingleProjectPage />} />
+                <Route path="/*" element={<NotFound />} />
+            </Routes>
         </ProjectProvider>
     );
 };

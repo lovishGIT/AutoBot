@@ -28,9 +28,13 @@ export const createProject = async (req, res) => {
 // @route   GET /api/projects
 export const getUserProjects = async (req, res) => {
     try {
-        const projects = await Project.find({ owner: req.user._id });
+        const userDocWithProjects = await User.findById(req.user._id).populate('projects');
+        if (!userDocWithProjects) {
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
 
-        res.status(200).json(projects);
+        res.status(200).json(userDocWithProjects.projects);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

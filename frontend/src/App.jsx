@@ -5,10 +5,11 @@ import './App.css';
 import Home from './pages/home';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
-import UserProjectDashboard from './pages/projects';
+import UserProjectDashboard from './pages/projects/projects';
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ProjectDashboard from './pages/projectDetails';
+
 import { UserProvider } from './context/user.context';
 
 function App() {
@@ -20,13 +21,8 @@ function App() {
                         <Route exact path="/" element={<Home />} />
                         <Route
                             exact
-                            path="/projects"
+                            path="/projects/*"
                             element={<UserProjectDashboard />}
-                        />
-                        <Route
-                            exact
-                            path="/project/:id"
-                            element={<ProjectDashboard />}
                         />
                         <Route
                             exact
@@ -37,7 +33,7 @@ function App() {
                     </Routes>
                 </BrowserRouter>
                 <ToastContainer
-                    position="top-right"
+                    position="bottom-right"
                     autoClose={5000}
                     hideProgressBar={false}
                     newestOnTop={false}

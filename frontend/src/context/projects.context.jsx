@@ -37,6 +37,8 @@ export const ProjectProvider = ({ children }) => {
             // console.error('You need to login to view projects');
             setError('You need to login to view projects');
             navigate('/login', { replace: true });
+        } else {
+            fetchProjects();
         }
     }, [user]);
 
@@ -49,6 +51,8 @@ export const ProjectProvider = ({ children }) => {
             const response = await axios.get(API_BASE_URL, {
                 withCredentials: true,
             });
+            console.log('Fetched projects', response.data);
+
             setProjects(response.data);
         } catch (err) {
             console.error('Failed to fetch projects', err);

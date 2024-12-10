@@ -52,7 +52,7 @@ const LoginForm = ({ setError, showPassword, setShowPassword }) => {
                 />
             </div>
             <div className="relative">
-                <label className="block text-gray-400 mb-2 flex items-center">
+                <label className="text-gray-400 mb-2 flex items-center">
                     <Lock className="mr-2 text-blue-500" size={20} />
                     Password
                 </label>

@@ -65,25 +65,3 @@ const ticketSchema = new Schema(
 
 const Ticket = model('Ticket', ticketSchema);
 export default Ticket;
-// const sampleTickets = {
-//         title: 'Fix login bug',
-//         description: 'Users are unable to login with correct credentials.',
-//         collaborators: [],
-//         status: 'open',
-//         priority: 'high',
-//         progress: 0,
-//         projectId: '60d21b4667d0d8992e610c85',
-//         comments: [
-//             {
-//                 text: 'This issue needs to be resolved ASAP.',
-//                 author: '60d21b4667d0d8992e610c86',
-//                 tag: ['pinned']
-//             },
-//             {
-//                 text: 'I am working on this.',
-//                 author: '60d21b4667d0d8992e610c87',
-//                 tag: ['admin']
-//             }
-//         ],
-//         dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
-//     }

@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/users", userRouter);
 app.use("/api/projects", verifyJWT, projectRouter);
-app.use("/api/projects/:projId/tickets", verifyJWT, ticketRouter);
+app.use('/api/projects/:projectId/tickets', verifyJWT, ticketRouter);
 
 connectDB().then(() => {
     app.listen(port, () => {

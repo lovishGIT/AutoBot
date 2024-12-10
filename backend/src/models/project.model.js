@@ -40,6 +40,18 @@ const projectSchema = new Schema(
                 trim: true,
             }
         ],
+        tickets: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Ticket',
+            }
+        ],
+        collaborators: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+            }
+        ],
     },
     { timestamps: true }
 );

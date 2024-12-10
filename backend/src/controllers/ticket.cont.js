@@ -9,6 +9,9 @@ const asyncHandler = (fn) => (req, res, next) => {
 // @desc    Create a new ticket
 // @route   POST /api/tickets
 export const createTicket = asyncHandler(async (req, res) => {
+
+    const { projectId } = req.params;
+
     const {
         title,
         description,
@@ -16,7 +19,6 @@ export const createTicket = asyncHandler(async (req, res) => {
         status,
         priority,
         progress,
-        projectId,
         dueDate,
     } = req.body;
 
@@ -30,7 +32,7 @@ export const createTicket = asyncHandler(async (req, res) => {
     // Ensure only project owner or collaborators can create tickets
     if (
         project.owner.toString() !== req.user._id.toString() &&
-        !project.collaborators?.includes(req.user._id)
+        !project?.collaborators?.includes(req.user._id)
     ) {
         res.status(401);
         throw new Error(
@@ -41,15 +43,25 @@ export const createTicket = asyncHandler(async (req, res) => {
     const ticket = await Ticket.create({
         title,
         description,
-        collaborators: collaborators || [req.user._id],
+        createdBy: req.user._id,
+        collaborators: collaborators || project.collaborators || [req.user._id],
         status: status || 'open',
         priority: priority || 'medium',
         progress: progress || 0,
-        projectId,
+        projectId: projectId,
         dueDate,
     });
 
-    res.status(201).json(ticket);
+    if (!ticket) {
+        return res.status(400).json({ message: 'Invalid ticket data' });
+    }
+
+    await Project.findByIdAndUpdate({projectId}, {
+            $push: { tickets: ticket._id },
+        }
+    );
+
+    return res.status(201).json(ticket);
 });
 
 // @route   GET /api/tickets/project/:projectId

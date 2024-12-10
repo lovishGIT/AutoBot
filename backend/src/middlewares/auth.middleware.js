@@ -6,7 +6,9 @@ const verifyJWT = (req, res, next) => {
 
     const token =
         req?.cookies?.token ||
-        req?.headers['authorization']?.split('Bearer ')?.[1] || req?.headers['authorization']?.split('Bearer ')?.[0];
+        req?.headers['authorization']?.split('Bearer ')?.[1] ||
+        req?.headers['authorization']?.split('Bearer ')?.[0] ||
+        req?.headers.cookie.split('token=')[1]; // postman [temp]
 
     if (!token) {
         return res.status(401).json({ message: 'No token provided' });

@@ -9,7 +9,6 @@ import {
     updateComment,
     deleteComment,
 } from '../controllers/ticket.cont.js';
-import verifyJWT from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
