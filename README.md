@@ -18,13 +18,7 @@ This project is an automation tool designed to streamline repetitive tasks and i
     ```sh
     cd automation-tool
     ```
-3. Install dependencies:
-    ```sh
-    npm install
-    ```
-
-## Usage
-1. Setup .env file with the following variables:
+3. Setup .env file with the following variables:
     For Frontend:
     ```sh
     VITE_API_URL= # BACKEND API URL
@@ -32,13 +26,37 @@ This project is an automation tool designed to streamline repetitive tasks and i
 
     For Backend:
     ``` sh
-    PORT= # PORT NUMBER
+    PORT= 4000 # PORT
+    JWT_SECRET= # JWT SECRET
+    MONGODB_URI= # MONGODB URI
+    CLIENT_URL= # FRONTEND URL
     ```
 
-2. Run the tool:
-    ```sh
-    npm start
-    ```
+4. Install the dependencies:
+    FRONTEND:
+        ```sh
+        cd frontend
+        npm install
+        ```
+    BACKEND:
+        ```sh
+        cd backend
+        npm install
+        ```
+
+5. Start the development server:
+    FRONTEND:
+        ```sh
+        npm run dev
+        ```
+    BACKEND:
+        ```sh
+        npm run dev
+        ```
+
+6. Open your browser and navigate to `http://localhost:3000` to view the application.
+7. Testing for API can be done via Postman or Insomnia or Thunder Client at `http://localhost:4000`.
+
 
 ## Contributing
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
