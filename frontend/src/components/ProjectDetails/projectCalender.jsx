@@ -1,5 +1,5 @@
 import React from 'react';
-import { useProject } from '@/hooks/project.hook';
+import { useProject } from '@/context/project.context';
 import MonthNavigation from './monthNavigation';
 
 const ProjectCalendar = () => {

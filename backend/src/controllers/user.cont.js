@@ -38,15 +38,14 @@ export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Check for user
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: 'User Not Found. Please Register.' });
         }
 
-        if (user && await user.correctPassword(password)) {
+        if (await user.correctPassword(password)) {
             await generateToken(user, res);
-            return res.json({
+            return res.status(200).json({
                 _id: user._id,
                 fullName: user.fullName,
                 email: user.email,

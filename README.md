@@ -24,7 +24,17 @@ This project is an automation tool designed to streamline repetitive tasks and i
     ```
 
 ## Usage
-1. Configure the tool by editing the `config.json` file.
+1. Setup .env file with the following variables:
+    For Frontend: 
+    ```sh
+    VITE_API_URL= # BACKEND API URL
+    ```
+
+    For Backend:
+    ``` sh
+    PORT= # PORT NUMBER
+    ```
+
 2. Run the tool:
     ```sh
     npm start

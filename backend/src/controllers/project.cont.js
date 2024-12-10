@@ -4,10 +4,11 @@ import User from '../models/user.model.js';
 // @route   POST /api/projects
 export const createProject = async (req, res) => {
     try {
-        const { description, link, resources, status } = req.body;
+        const { name, description, link, resources, status } = req.body;
 
         const project = await Project.create({
             owner: req.user._id,
+            name,
             description,
             link,
             resources,

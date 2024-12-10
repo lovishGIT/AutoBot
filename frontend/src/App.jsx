@@ -5,11 +5,11 @@ import './App.css';
 import Home from './pages/home';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
-import { UserProvider } from './hooks/user.hook';
 import UserProjectDashboard from './pages/projects';
-import ProjectDetailsPage from './pages/projectDetails';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ProjectDashboard from './pages/projectDetails';
+import { UserProvider } from './context/user.context';
 
 function App() {
     return (
@@ -26,7 +26,7 @@ function App() {
                         <Route
                             exact
                             path="/project/:id"
-                            element={<ProjectDetailsPage />}
+                            element={<ProjectDashboard />}
                         />
                         <Route
                             exact

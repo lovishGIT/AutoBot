@@ -6,11 +6,7 @@ const verifyJWT = (req, res, next) => {
 
     const token =
         req?.cookies?.token ||
-        req?.headers?.cookie?.toString()?.split('token=')[1].split(';')[0] ||
         req?.headers['authorization']?.split('Bearer ')?.[1] || req?.headers['authorization']?.split('Bearer ')?.[0];
-
-    // console.log(token);
-
 
     if (!token) {
         return res.status(401).json({ message: 'No token provided' });

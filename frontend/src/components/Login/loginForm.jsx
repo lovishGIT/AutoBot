@@ -5,12 +5,12 @@ import {
     Lock,
     Mail,
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useUser } from '@/hooks/user.hook';
+import { UserContext } from '@/context/user.context';
 
 const LoginForm = ({ setError, showPassword, setShowPassword }) => {
-    const { signIn, isLoading } = useUser();
+    const { signIn, isLoading } = useContext(UserContext);
     const [loginData, setLoginData] = useState({
         email: '',
         password: '',
@@ -27,6 +27,7 @@ const LoginForm = ({ setError, showPassword, setShowPassword }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
+
             await signIn(loginData);
         } catch (error) {
             setError('Login failed. Please try again.');
@@ -36,7 +37,7 @@ const LoginForm = ({ setError, showPassword, setShowPassword }) => {
     return (
         <form onSubmit={handleLogin} className="w-full space-y-6">
             <div className="relative">
-                <label className="block text-gray-400 mb-2 flex items-center">
+                <label className="text-gray-400 mb-2 flex items-center">
                     <Mail className="mr-2 text-blue-500" size={20} />
                     Email Address
                 </label>

@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useUser } from '@/hooks/user.hook';
+import { UserContext } from '@/context/user.context';
 import { ArrowRight } from 'lucide-react';
 
 const HeroSection = () => {
-    const { user } = useUser();
+    const { user } = useContext(UserContext);
+    useEffect(() => {
+        document.title = 'AutoBot | Home';
+        if (!user) {
+            console.log('User not found');
+        }
+    }, []);
 
     return (
         <div className="bg-gray-900 text-white pt-24 pb-16 h-[100vh] flex flex-col justify-center items-center">
             <div className="container mx-auto px-4 flex flex-col items-center text-center">
-                <h1 className="text-5xl font-bold mb-6 max-w-3xl">
+                <h1 className="text-5xl font-bold mb-6 max-w-3xl capitalize">
                     {user?.fullName
-                        ? `Welcome, ${user?.fullName}! Automate Your Workflow Effortlessly`
+                        ? `welcome, ${user?.fullName}! automate your Workflow Effortlessly`
                         : 'Automate Your Workflow with Intelligent Precision'}
                 </h1>
                 <p className="text-xl text-gray-400 mb-8 max-w-2xl">

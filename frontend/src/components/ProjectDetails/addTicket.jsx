@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { useProject } from '@/hooks/project.hook';
+import { useProject } from '@/context/project.context';
 
 const AddTicketModal = () => {
     const {

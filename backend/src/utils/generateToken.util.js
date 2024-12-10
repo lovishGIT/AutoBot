@@ -12,13 +12,10 @@ const generateToken = (user, res) => {
 
     res.cookie('token', token, {
         httpOnly: true,
+        sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
+        maxAge: 3600000,
     });
-
-    console.log("setting token ", token, "in cookie");
-
-
-    return token;
 };
 
 export default generateToken;

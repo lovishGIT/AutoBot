@@ -45,7 +45,7 @@ const projectSchema = new Schema(
 );
 
 projectSchema.pre('save', async function (next) {
-    if (this.isNew) {
+    if (this.isNew && !this.name) {
         const owner = await User.findById(this.owner);
         if (!owner) {
             const err = new Error('Owner not found');
