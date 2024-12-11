@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
     ArrowLeft,
     Edit,
     Trash2,
     Folder,
     Calendar,
-    Users,
     Link as LinkIcon,
-    FileText,
     Activity,
 } from 'lucide-react';
 import { useProject } from '@/context/projects.context';
@@ -74,7 +72,9 @@ const SingleProjectPage = () => {
         if (confirmDelete) {
             try {
                 await deleteProject(id);
-                navigate('/projects');
+                navigate('/projects', {
+                    replace: true,
+                });
             } catch (error) {
                 console.error('Failed to delete project', error);
             }
@@ -132,6 +132,7 @@ const SingleProjectPage = () => {
                                     <button
                                         onClick={handleSaveProject}
                                         className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center"
+                                        aria-label="Save project"
                                     >
                                         Save
                                     </button>
@@ -140,6 +141,7 @@ const SingleProjectPage = () => {
                                             setIsEditing(false)
                                         }
                                         className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md flex items-center"
+                                        aria-label="Cancel editing"
                                     >
                                         Cancel
                                     </button>
@@ -151,6 +153,7 @@ const SingleProjectPage = () => {
                                             setIsEditing(true)
                                         }
                                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
+                                        aria-label='Edit project'
                                     >
                                         <Edit className="mr-2 w-4 h-4" />{' '}
                                         Edit
@@ -158,6 +161,7 @@ const SingleProjectPage = () => {
                                     <button
                                         onClick={handleDeleteProject}
                                         className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center"
+                                        aria-label='Delete project'
                                     >
                                         <Trash2 className="mr-2 w-4 h-4" />{' '}
                                         Delete
@@ -319,7 +323,9 @@ const SingleProjectPage = () => {
                         </div>
                     </div>
 
-                    <ProjectActivity activities={project.activities} />
+                    <ProjectActivity
+                        activities={project.activities}
+                    />
                     <ProjectTickets projectId={id} />
                 </div>
             </div>

@@ -161,7 +161,7 @@ export const ProjectProvider = ({ children }) => {
                 withCredentials: true,
             });
             setProjects((prev) =>
-                prev.filter((project) => project.id !== id)
+                prev.filter((project) => project._id !== id)
             );
             toast.info('Project deleted successfully!');
         } catch (err) {
