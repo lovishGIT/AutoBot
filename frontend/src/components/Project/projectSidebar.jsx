@@ -1,43 +1,46 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Folder, Briefcase } from 'lucide-react';
+import { ProjectContext } from '@/context/projects.context';
+import { UserContext } from '@/context/user.context';
+
+const iconMap = {
+    folder: Folder,
+    briefcase: Briefcase,
+    // Add more mappings as needed
+};
+
+const SingleProjectLink = ({ project, Icon }) => {
+    if (!Icon) {
+        Icon = Folder;
+    }
+
+    return (
+        <Link
+            to={`/projects/${project._id}`}
+            className="py-2 px-3 hover:bg-gray-700 rounded transition flex items-center"
+        >
+            <Icon className="mr-2 w-4 h-4" />
+            <span>{project.name}</span>
+            <span
+                className={`ml-auto text-xs px-2 py-1 rounded-full
+                ${
+                    project.status === 'completed'
+                        ? 'bg-green-600'
+                        : 'bg-blue-600'
+                }`}
+            >
+                {project.status}
+            </span>
+        </Link>
+    );
+};
+
+
 
 const ProjectSidebar = () => {
-    // Sample project data (similar to the main dashboard)
-    const allProjects = [
-        {
-            id: 1,
-            name: 'E-commerce Platform',
-            type: 'Professional',
-            status: 'In Progress',
-            icon: Briefcase,
-            iconColor: 'text-blue-500',
-        },
-        {
-            id: 2,
-            name: 'Mobile Banking App',
-            type: 'Professional',
-            status: 'Completed',
-            icon: Briefcase,
-            iconColor: 'text-blue-500',
-        },
-        {
-            id: 3,
-            name: 'Portfolio Website',
-            type: 'Personal',
-            status: 'In Progress',
-            icon: Folder,
-            iconColor: 'text-green-500',
-        },
-        {
-            id: 4,
-            name: 'Machine Learning Study',
-            type: 'Personal',
-            status: 'Ongoing',
-            icon: Folder,
-            iconColor: 'text-green-500',
-        },
-    ];
+    const { user } = useContext(UserContext);
+    const { projects } = useContext(ProjectContext);
 
     return (
         <div className="w-64 bg-gray-800 text-white p-6 h-screen fixed left-0 top-[10vh] overflow-y-auto">
@@ -48,31 +51,14 @@ const ProjectSidebar = () => {
                     <Briefcase className="mr-2 text-blue-500" />
                     Professional Projects
                 </h3>
-                {allProjects
-                    .filter(
-                        (project) => project.type === 'Professional'
-                    )
+                {projects
+                    .filter((project) => project.owner !== user._id)
                     .map((project) => (
-                        <Link
-                            key={project.id}
-                            to={`/project/${project.id}`}
-                            className="block py-2 px-3 hover:bg-gray-700 rounded transition flex items-center"
-                        >
-                            <project.icon
-                                className={`mr-2 ${project.iconColor} w-4 h-4`}
-                            />
-                            <span>{project.name}</span>
-                            <span
-                                className={`ml-auto text-xs px-2 py-1 rounded-full
-                                    ${
-                                        project.status === 'Completed'
-                                            ? 'bg-green-600'
-                                            : 'bg-blue-600'
-                                    }`}
-                            >
-                                {project.status}
-                            </span>
-                        </Link>
+                        <SingleProjectLink
+                            key={project._id}
+                            project={project}
+                            icon={Briefcase}
+                        />
                     ))}
             </div>
 
@@ -81,29 +67,14 @@ const ProjectSidebar = () => {
                     <Folder className="mr-2 text-green-500" />
                     Your Projects
                 </h3>
-                {allProjects
-                    .filter((project) => project.type === 'Personal')
+                {projects
+                    .filter((project) => project.owner === user._id)
                     .map((project) => (
-                        <Link
-                            key={project.id}
-                            to={`/project/${project.id}`}
-                            className="block py-2 px-3 hover:bg-gray-700 rounded transition flex items-center"
-                        >
-                            <project.icon
-                                className={`mr-2 ${project.iconColor} w-4 h-4`}
-                            />
-                            <span>{project.name}</span>
-                            <span
-                                className={`ml-auto text-xs px-2 py-1 rounded-full
-                                    ${
-                                        project.status === 'Completed'
-                                            ? 'bg-green-600'
-                                            : 'bg-blue-600'
-                                    }`}
-                            >
-                                {project.status}
-                            </span>
-                        </Link>
+                        <SingleProjectLink
+                            key={project._id}
+                            project={project}
+                            icon={Folder}
+                        />
                     ))}
             </div>
         </div>

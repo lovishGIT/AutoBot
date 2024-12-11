@@ -12,6 +12,7 @@ import {
     Activity,
 } from 'lucide-react';
 import { useProject } from '@/context/projects.context';
+import ProjectTickets from '@/components/Project/ProjectTickets';
 
 const SingleProjectPage = () => {
     const { id } = useParams();
@@ -332,6 +333,8 @@ const SingleProjectPage = () => {
                         </p>
                     )}
                 </div>
+
+                <ProjectTickets projectId={id} />
             </div>
         </div>
     );

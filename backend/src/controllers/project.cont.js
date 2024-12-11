@@ -1,10 +1,10 @@
 import Project from '../models/project.model.js';
 import User from '../models/user.model.js';
 
-// @route   POST /api/projects
 export const createProject = async (req, res) => {
     try {
-        const { name, description, link, resources, status } = req.body;
+        const { name, description, link, resources, status } =
+            req.body;
 
         const project = await Project.create({
             owner: req.user._id,
@@ -25,13 +25,16 @@ export const createProject = async (req, res) => {
     }
 };
 
-// @route   GET /api/projects
 export const getUserProjects = async (req, res) => {
     try {
-        const userDocWithProjects = await User.findById(req.user._id).populate('projects');
+        const userDocWithProjects = await User.findById(
+            req.user._id
+        ).populate('projects');
+
         if (!userDocWithProjects) {
-            res.status(404).json({ message: 'User not found' });
-            return;
+            return res
+                .status(404)
+                .json({ message: 'User not found' });
         }
 
         res.status(200).json(userDocWithProjects.projects);
@@ -40,42 +43,21 @@ export const getUserProjects = async (req, res) => {
     }
 };
 
-// @route   GET /api/projects/:id
 export const getProjectById = async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id);
-
-        if (!project) {
-            res.status(404).json({ message: 'Project not found' });
-            return;
-        }
-        if (project.owner.toString() !== req.user._id.toString()) {
-            res.status(401).json({ message: 'Not authorized to access this project' });
-            return;
-        }
-
+        const project = req.project;
         res.status(200).json(project);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-// @route   PATCH /api/projects/:id
 export const updateProject = async (req, res) => {
     try {
-        const { description, link, resources, status, activities } = req.body;
+        const { description, link, resources, status, activities } =
+            req.body;
 
-        const project = await Project.findById(req.params.id);
-
-        if (!project) {
-            res.status(404).json({ message: 'Project not found' });
-            return;
-        }
-
-        if (project.owner.toString() !== req.user._id.toString()) {
-            res.status(401).json({ message: 'Not authorized to update this project' });
-            return;
-        }
+        const project = req.project;
 
         project.description = description || project.description;
         project.link = link || project.link;
@@ -91,20 +73,9 @@ export const updateProject = async (req, res) => {
     }
 };
 
-// @route   DELETE /api/projects/:id
 export const deleteProject = async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id);
-
-        if (!project) {
-            res.status(404).json({ message: 'Project not found' });
-            return;
-        }
-
-        if (project.owner.toString() !== req.user._id.toString()) {
-            res.status(401).json({ message: 'Not authorized to delete this project' });
-            return;
-        }
+        const project = req.project;
 
         await User.findByIdAndUpdate(req.user._id, {
             $pull: { projects: project._id },

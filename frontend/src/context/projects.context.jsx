@@ -133,7 +133,7 @@ export const ProjectProvider = ({ children }) => {
             );
             setProjects((prev) =>
                 prev.map((project) =>
-                    project.id === id
+                    project._id === id
                         ? { ...project, ...response.data }
                         : project
                 )

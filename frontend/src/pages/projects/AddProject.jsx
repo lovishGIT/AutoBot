@@ -4,8 +4,8 @@ import { useProject } from '@/context/projects.context';
 import {
     ArrowLeft,
     Folder,
-    Users,
-    Calendar,
+    Link2,
+    BookOpen,
     CheckCircle,
 } from 'lucide-react';
 
@@ -16,25 +16,24 @@ const AddProjectPage = () => {
     const [projectData, setProjectData] = useState({
         name: '',
         description: '',
-        status: 'In Progress',
-        deadline: '',
-        team: 1,
+        link: '',
+        resources: '',
+        status: 'active',
     });
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setProjectData((prev) => ({
             ...prev,
-            [name]:
-                name === 'team' || name === 'progress'
-                    ? parseInt(value)
-                    : value,
+            [name]: value,
         }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            projectData.link = projectData.link.split(',');
+            projectData.resources = projectData.resources.split(',');
             await createProject(projectData);
             navigate('/projects');
         } catch (error) {
@@ -66,7 +65,7 @@ const AddProjectPage = () => {
                     <div className="mb-4">
                         <label
                             htmlFor="name"
-                            className="block text-sm font-medium text-gray-300 mb-2 flex items-center"
+                            className="text-sm font-medium text-gray-300 mb-2 flex items-center"
                         >
                             <Folder className="mr-2 text-blue-500" />
                             Project Name
@@ -79,6 +78,7 @@ const AddProjectPage = () => {
                             onChange={handleInputChange}
                             className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter project name"
+                            required
                         />
                     </div>
 
@@ -100,71 +100,65 @@ const AddProjectPage = () => {
                         />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label
-                                htmlFor="status"
-                                className="text-sm font-medium text-gray-300 mb-2 flex items-center"
-                            >
-                                <CheckCircle className="mr-2 text-green-500" />
-                                Project Status
-                            </label>
-                            <select
-                                id="status"
-                                name="status"
-                                value={projectData.status}
-                                onChange={handleInputChange}
-                                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500"
-                            >
-                                <option value="In Progress">
-                                    In Progress
-                                </option>
-                                <option value="Ongoing">
-                                    Ongoing
-                                </option>
-                                <option value="Completed">
-                                    Completed
-                                </option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label
-                                htmlFor="team"
-                                className="block text-sm font-medium text-gray-300 mb-2 flex items-center"
-                            >
-                                <Users className="mr-2 text-purple-500" />
-                                Team Size
-                            </label>
-                            <input
-                                type="number"
-                                id="team"
-                                name="team"
-                                value={projectData.team}
-                                onChange={handleInputChange}
-                                min="1"
-                                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
+                    <div className="mb-4">
+                        <label
+                            htmlFor="link"
+                            className="text-sm font-medium text-gray-300 mb-2 flex items-center"
+                        >
+                            <Link2 className="mr-2 text-green-500" />
+                            Project Link
+                        </label>
+                        <input
+                            type="text"
+                            id="link"
+                            name="link"
+                            value={projectData.link}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter project link (comma seprated)"
+                        />
                     </div>
 
-                        <div>
-                            <label
-                                htmlFor="deadline"
-                                className="block text-sm font-medium text-gray-300 mb-2 flex items-center"
-                            >
-                                <Calendar className="mr-2 text-yellow-500" />
-                                Deadline
-                            </label>
-                            <input
-                                type="date"
-                                id="deadline"
-                                name="deadline"
-                                value={projectData.deadline}
-                                onChange={handleInputChange}
-                                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
+                    <div className="mb-4">
+                        <label
+                            htmlFor="resources"
+                            className="text-sm font-medium text-gray-300 mb-2 flex items-center"
+                        >
+                            <BookOpen className="mr-2 text-purple-500" />
+                            Project Resources
+                        </label>
+                        <textarea
+                            id="resources"
+                            name="resources"
+                            value={projectData.resources}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500"
+                            placeholder="List project resources (comma seprated)"
+                            rows="3"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label
+                            htmlFor="status"
+                            className="text-sm font-medium text-gray-300 mb-2 flex items-center"
+                        >
+                            <CheckCircle className="mr-2 text-yellow-500" />
+                            Project Status
+                        </label>
+                        <select
+                            id="status"
+                            name="status"
+                            value={projectData.status}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500 capitalize"
+                        >
+                            <option value="active">active</option>
+                            <option value="inactive">inactive</option>
+                            <option value="completed">
+                                Completed
+                            </option>
+                        </select>
                     </div>
 
                     <button

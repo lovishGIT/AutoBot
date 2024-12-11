@@ -3,7 +3,6 @@ import cors from "cors";
 import express from "express";
 import { connectDB } from "./src/config/db.connect.js";
 import userRouter from './src/routes/user.route.js';
-import ticketRouter from "./src/routes/ticket.route.js";
 import projectRouter from "./src/routes/project.route.js";
 import verifyJWT from "./src/middlewares/auth.middleware.js";
 
@@ -19,7 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/users", userRouter);
 app.use("/api/projects", verifyJWT, projectRouter);
-app.use('/api/projects/:projectId/tickets', verifyJWT, ticketRouter);
 
 connectDB().then(() => {
     app.listen(port, () => {
