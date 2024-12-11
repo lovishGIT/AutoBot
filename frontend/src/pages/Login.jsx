@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import LoginForm from '@/components/Login/LoginForm';
-import RegisterForm from '@/components/Login/RegisterForm';
+import LoginForm from '@/components/Login/loginForm';
+import RegisterForm from '@/components/Login/registerForm';
 import { UserContext } from '@/context/user.context';
 import { toast } from 'react-toastify';
 
