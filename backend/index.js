@@ -19,8 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/users", userRouter);
 app.use("/api/projects", verifyJWT, projectRouter);
 
-app.get("/health", (req, res) => {
-    res.send("Welcome to Project Management API");
+app.get("/", (req, res) => {
+    res.send("Welcome to Auto bot API");
 });
 
 connectDB().then(() => {
