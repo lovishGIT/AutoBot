@@ -43,7 +43,7 @@ const ProjectSidebar = () => {
     const { projects } = useContext(ProjectContext);
 
     return (
-        <div className="w-64 bg-gray-800 text-white p-6 h-screen fixed left-0 top-[10vh] overflow-y-auto">
+        <div className="w-64 bg-gray-800 text-white p-6 h-screen fixed left-0 top-0 overflow-y-auto">
             <h2 className="text-2xl font-bold mb-6">My Projects</h2>
 
             <div className="mb-4">

@@ -189,7 +189,7 @@ export const ProjectProvider = ({ children }) => {
 
     return (
         <ProjectContext.Provider value={contextValue}>
-            {!isLoading && children}
+            {children}
         </ProjectContext.Provider>
     );
 };

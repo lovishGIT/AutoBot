@@ -61,8 +61,9 @@ const ProjectDashboard = () => {
     };
 
     return (
-        <div className="bg-gray-900 text-white min-h-screen p-8 pl-72">
-                <ProjectSidebar />
+        <>
+            <ProjectSidebar />
+            <div className="bg-gray-900 text-white min-h-screen p-8 pl-72">
                 <div className="container mx-auto">
                     <h1 className="text-3xl font-bold mb-8 text-gray-100 flex items-center">
                         <button
@@ -211,7 +212,8 @@ const ProjectDashboard = () => {
                         </div>
                     </div>
                 </div>
-        </div>
+            </div>
+        </>
     );
 };
 
