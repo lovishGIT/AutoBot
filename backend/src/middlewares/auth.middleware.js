@@ -18,9 +18,6 @@ const verifyJWT = (req, res, next) => {
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 
-    // console.log(token, JWT_SECRET);
-
-
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         if(!decoded) {

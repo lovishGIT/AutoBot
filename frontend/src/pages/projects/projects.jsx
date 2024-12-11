@@ -4,7 +4,6 @@ import { UserContext } from '@/context/user.context';
 import { ProjectProvider } from '@/context/projects.context';
 import ProjectDashboard from './projectDashboard';
 import AddProjectPage from './AddProject';
-import NotFound from '../NotFound';
 import SingleProjectPage from './singleProduct';
 
 const UserProjectDashboard = () => {
@@ -37,7 +36,6 @@ const UserProjectDashboard = () => {
                 <Route path="/" element={<ProjectDashboard />} />
                 <Route path="/add" element={<AddProjectPage />} />
                 <Route path="/:id" element={<SingleProjectPage />} />
-                <Route path="/*" element={<NotFound />} />
             </Routes>
         </ProjectProvider>
     );

@@ -70,7 +70,7 @@ export const addComment = async (req, res) => {
     try {
         const { text } = req.body;
 
-        const ticket = await Ticket.findById(req.params.id);
+        const ticket = req.ticket;
 
         if (!ticket) {
             return res

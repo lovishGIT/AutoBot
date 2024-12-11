@@ -48,7 +48,7 @@ export const validateTicketAccess = async (req, res, next) => {
                 .json({ message: 'Ticket not found' });
         }
 
-        const project = await Project.findById(ticket.projectId);
+        const project = req.project;
 
         if (!project) {
             return res

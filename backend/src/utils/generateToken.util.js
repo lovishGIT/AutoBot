@@ -14,7 +14,7 @@ const generateToken = (user, res) => {
         httpOnly: true,
         sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
-        maxAge: 3600000,
+        maxAge: 3600000
     });
 };
 

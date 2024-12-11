@@ -4,7 +4,6 @@ import {
     User,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { UserContext } from '@/context/user.context';
 
 const Navbar = () => {
