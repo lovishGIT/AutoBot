@@ -19,6 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/users", userRouter);
 app.use("/api/projects", verifyJWT, projectRouter);
 
+app.get("/health", (req, res) => {
+    res.send("Welcome to Project Management API");
+});
+
 connectDB().then(() => {
     app.listen(port, () => {
         console.log(`Server Listenning on http://localhost:${port}`);
