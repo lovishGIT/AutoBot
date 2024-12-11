@@ -51,7 +51,7 @@ const RegisterForm = ({ setError, showPassword, setShowPassword }) => {
     return (
         <form onSubmit={handleRegister} className="w-full space-y-6">
             <div>
-                <label className="block text-gray-400 mb-2 flex items-center">
+                <label className="text-gray-400 mb-2 flex items-center">
                     <User className="mr-2 text-blue-500" size={20} />
                     Full Name
                 </label>
@@ -66,7 +66,7 @@ const RegisterForm = ({ setError, showPassword, setShowPassword }) => {
                 />
             </div>
             <div>
-                <label className="block text-gray-400 mb-2 flex items-center">
+                <label className="text-gray-400 mb-2 flex items-center">
                     <Mail className="mr-2 text-blue-500" size={20} />
                     Email Address
                 </label>
@@ -81,7 +81,7 @@ const RegisterForm = ({ setError, showPassword, setShowPassword }) => {
                 />
             </div>
             <div>
-                <label className="block text-gray-400 mb-2 flex items-center">
+                <label className="text-gray-400 mb-2 flex items-center">
                     <Lock className="mr-2 text-blue-500" size={20} />
                     Password
                 </label>
@@ -107,7 +107,7 @@ const RegisterForm = ({ setError, showPassword, setShowPassword }) => {
                 </button>
             </div>
             <div>
-                <label className="block text-gray-400 mb-2 flex items-center">
+                <label className="text-gray-400 mb-2 flex items-center">
                     <Lock className="mr-2 text-blue-500" size={20} />
                     Confirm Password
                 </label>
