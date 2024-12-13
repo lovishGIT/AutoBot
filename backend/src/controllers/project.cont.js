@@ -10,10 +10,11 @@ export const createProject = async (req, res) => {
         const { name, description, link, status } = req.body;
 
         let resources = [];
-        let collaborators = req.body.collaborators || [];
+        let collaborators = req.body.collaborators || '';
+
+        console.log(req.body, req.files);
 
         if (req.files) {
-
             resources = req.files.map((file) => {
                 return file.path;
             });
@@ -30,7 +31,18 @@ export const createProject = async (req, res) => {
             }
         }
 
+        if (req.body.resourceTexts) {
+            resources = [
+                ...resources,
+                ...req.body.resourceTexts.split(',').map((text) => {
+                    return { text };
+                }),
+            ];
+        }
+
         if (collaborators) {
+            console.log("collaborators", collaborators);
+
             collaborators = collaborators.trim().split(',');
             collaborators = await Promise.all(
                 collaborators.map(async (email) => {
@@ -42,14 +54,22 @@ export const createProject = async (req, res) => {
             );
         }
 
+        resources = resources?.length > 0 ?
+            resources.filter( (resource) =>
+                resource != null && (resource?.url?.length > 0 || resource?.text?.length > 0))
+            : [];
+
         const project = await Project.create({
             owner: req.user._id,
             name,
             description,
-            link,
-            resources,
+            link: link
+                .split(',')
+                .map((link) => link.trim())
+                .filter((link) => link.length > 0),
+            resources: resources,
             status,
-            collaborators,
+            collaborators: collaborators.length > 0 ? collaborators : [],
         });
 
         await User.findByIdAndUpdate(req.user._id, {
@@ -58,6 +78,7 @@ export const createProject = async (req, res) => {
 
         return res.status(201).json(project);
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ message: error.message });
     }
 };

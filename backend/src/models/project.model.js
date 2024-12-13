@@ -29,12 +29,14 @@ const projectSchema = new Schema(
                 url: {
                     type: String,
                     trim: true,
-                    required: true,
                 },
                 public_id: {
                     type: String,
                     trim: true,
-                    required: true,
+                },
+                text: {
+                    type: String,
+                    trim: true,
                 },
                 _id: false,
             },

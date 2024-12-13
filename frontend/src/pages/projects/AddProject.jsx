@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProject } from '@/context/projects.context';
-import {
-    ArrowLeft,
-    Folder,
-    Link2,
-    BookOpen,
-    CheckCircle,
-} from 'lucide-react';
+import { PageHeader } from '@/components/Project/add/projectHeader';
+import { ProjectBasicInfo } from '@/components/Project/add/projectBaseInfo';
+import { ProjectLinkInput } from '@/components/Project/add/projectLinkInput';
+import { ProjectResourcesSection } from '@/components/Project/add/projectResourceSection';
+import { ProjectStatusSelector } from '@/components/Project/add/projectStatusSelector';
 
 const AddProjectPage = () => {
     const navigate = useNavigate();
@@ -17,9 +15,83 @@ const AddProjectPage = () => {
         name: '',
         description: '',
         link: '',
-        resources: '',
+        resources: [],
+        resourceTexts: [],
+        isFile: [],
         status: 'active',
     });
+
+    const [isResourcesOpen, setIsResourcesOpen] = useState(false);
+
+    const addResourceField = () => {
+        setProjectData((prev) => ({
+            ...prev,
+            resourceTexts: [...prev.resourceTexts, ''],
+            resources: [...prev.resources, ''],
+            isFile: [...prev.isFile, false],
+        }));
+    };
+
+    const removeResourceField = (indexToRemove) => {
+        setProjectData((prev) => ({
+            ...prev,
+            resourceTexts: prev.resourceTexts.filter(
+                (_, index) => index !== indexToRemove
+            ),
+            resources: prev.resources.filter(
+                (_, index) => index !== indexToRemove
+            ),
+            isFile: prev.isFile.filter(
+                (_, index) => index !== indexToRemove
+            ),
+        }));
+    };
+
+    const handleResourceChange = (
+        index,
+        value,
+        type
+    ) => {
+        setProjectData((prev) => {
+            const newState = { ...prev };
+            const isFileAtIndex = prev.isFile[index];
+
+            if (type === 'text' && !isFileAtIndex) {
+                newState.resourceTexts[index] = value;
+            } else if (type === 'file' && isFileAtIndex) {
+                newState.resources[index] = value;
+            }
+
+            return newState;
+        });
+    };
+
+    const handleResourceTypeToggle = (index) => {
+        setProjectData((prev) => {
+            const newIsFile = [...prev.isFile];
+            const newResourceTexts = [...prev.resourceTexts];
+            const newResources = [...prev.resources];
+
+            // Toggle the isFile state
+            newIsFile[index] = !newIsFile[index];
+
+            if (newIsFile[index]) {
+                // Switching from text to file
+                newResourceTexts[index] = '';
+                newResources[index] = '';
+            } else {
+                // Switching from file to text
+                newResources[index] = '';
+            }
+
+            return {
+                ...prev,
+                isFile: newIsFile,
+                resourceTexts: newResourceTexts,
+                resources: newResources,
+            };
+        });
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -32,10 +104,44 @@ const AddProjectPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            projectData.link = projectData.link.split(',');
-            projectData.resources = projectData.resources.split(',');
-            await createProject(projectData);
+            const formData = new FormData();
+
+            // Add basic project details
+            formData.append('name', projectData.name);
+            formData.append('description', projectData.description);
+            formData.append('status', projectData.status);
+
+            // Add links
+            const links = projectData.link;
+            formData.append('link', links);
+
+            // Add text resources
+            let resourceTexts = '';
+            projectData.resourceTexts.forEach((text, index) => {
+                if (text && !projectData.isFile[index]) {
+                    resourceTexts = resourceTexts + ', ' + text;
+                }
+            });
+
+            formData.append('resourceTexts', resourceTexts);
+
+            let resourceImages = new Array();
+            projectData.resources.forEach((file, index) => {
+                if (file && projectData.isFile[index]) {
+                    resourceImages.push(file);
+                }
+            });
+
+            resourceImages.forEach((file) => {
+                formData.append('resources', file);
+            });
+
+            // const data = Object.fromEntries(formData.entries());
+            // await createProject(data);
+
+            await createProject(formData);
             navigate('/projects');
+
         } catch (error) {
             console.error('Failed to create project', error);
         }
@@ -48,118 +154,43 @@ const AddProjectPage = () => {
     return (
         <div className="bg-gray-900 text-white min-h-screen p-8">
             <div className="container mx-auto max-w-2xl">
-                <h1 className="text-3xl font-bold mb-8 text-gray-100 flex items-center">
-                    <button
-                        className="mr-4"
-                        onClick={handleBackButton}
-                    >
-                        <ArrowLeft className="w-6 h-6" />
-                    </button>
-                    Create New Project
-                </h1>
+                <PageHeader onBackClick={handleBackButton} title={'Add Project'}/>
 
                 <form
                     onSubmit={handleSubmit}
                     className="bg-gray-800 rounded-lg p-8 shadow-lg"
                 >
-                    <div className="mb-4">
-                        <label
-                            htmlFor="name"
-                            className="text-sm font-medium text-gray-300 mb-2 flex items-center"
-                        >
-                            <Folder className="mr-2 text-blue-500" />
-                            Project Name
-                        </label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={projectData.name}
-                            onChange={handleInputChange}
-                            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter project name"
-                            required
-                        />
-                    </div>
+                    <ProjectBasicInfo
+                        name={projectData.name}
+                        description={projectData.description}
+                        onInputChange={handleInputChange}
+                    />
 
-                    <div className="mb-4">
-                        <label
-                            htmlFor="description"
-                            className="block text-sm font-medium text-gray-300 mb-2"
-                        >
-                            Project Description
-                        </label>
-                        <textarea
-                            id="description"
-                            name="description"
-                            value={projectData.description}
-                            onChange={handleInputChange}
-                            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500"
-                            placeholder="Describe your project"
-                            rows="4"
-                        />
-                    </div>
+                    <ProjectLinkInput
+                        link={projectData.link}
+                        onInputChange={handleInputChange}
+                    />
 
-                    <div className="mb-4">
-                        <label
-                            htmlFor="link"
-                            className="text-sm font-medium text-gray-300 mb-2 flex items-center"
-                        >
-                            <Link2 className="mr-2 text-green-500" />
-                            Project Link
-                        </label>
-                        <input
-                            type="text"
-                            id="link"
-                            name="link"
-                            value={projectData.link}
-                            onChange={handleInputChange}
-                            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter project link (comma seprated)"
-                        />
-                    </div>
+                    <ProjectResourcesSection
+                        isOpen={isResourcesOpen}
+                        onToggle={() =>
+                            setIsResourcesOpen(!isResourcesOpen)
+                        }
+                        resources={projectData.resources}
+                        resourceTexts={projectData.resourceTexts}
+                        isFile={projectData.isFile}
+                        onAddResource={addResourceField}
+                        onRemoveResource={removeResourceField}
+                        onResourceChange={handleResourceChange}
+                        onResourceTypeToggle={
+                            handleResourceTypeToggle
+                        }
+                    />
 
-                    <div className="mb-4">
-                        <label
-                            htmlFor="resources"
-                            className="text-sm font-medium text-gray-300 mb-2 flex items-center"
-                        >
-                            <BookOpen className="mr-2 text-purple-500" />
-                            Project Resources
-                        </label>
-                        <textarea
-                            id="resources"
-                            name="resources"
-                            value={projectData.resources}
-                            onChange={handleInputChange}
-                            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500"
-                            placeholder="List project resources (comma seprated)"
-                            rows="3"
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label
-                            htmlFor="status"
-                            className="text-sm font-medium text-gray-300 mb-2 flex items-center"
-                        >
-                            <CheckCircle className="mr-2 text-yellow-500" />
-                            Project Status
-                        </label>
-                        <select
-                            id="status"
-                            name="status"
-                            value={projectData.status}
-                            onChange={handleInputChange}
-                            className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500 capitalize"
-                        >
-                            <option value="active">active</option>
-                            <option value="inactive">inactive</option>
-                            <option value="completed">
-                                Completed
-                            </option>
-                        </select>
-                    </div>
+                    <ProjectStatusSelector
+                        status={projectData.status}
+                        onInputChange={handleInputChange}
+                    />
 
                     <button
                         type="submit"

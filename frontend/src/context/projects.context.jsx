@@ -34,7 +34,6 @@ export const ProjectProvider = ({ children }) => {
     const navigate = useNavigate();
     useEffect(() => {
         if (!user) {
-            // console.error('You need to login to view projects');
             setError('You need to login to view projects');
             navigate('/login', { replace: true });
         } else {
@@ -104,6 +103,10 @@ export const ProjectProvider = ({ children }) => {
                 API_BASE_URL,
                 projectData,
                 {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                        'Content-Type': 'multipart/form-data'
+                    },
                     withCredentials: true,
                 }
             );

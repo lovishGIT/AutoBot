@@ -301,22 +301,29 @@ const SingleProjectPage = () => {
                                     project.resources.length > 0 ? (
                                         project.resources.map(
                                             (resource, index) => (
-                                                <a
+                                                resource.url ? (
+                                                    <a
                                                     key={index}
-                                                    href={resource}
+                                                    href={resource.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="block bg-gray-700 hover:bg-gray-600 text-blue-400 hover:text-blue-300 rounded-md px-3 py-2 truncate"
                                                 >
-                                                    {resource}
-                                                </a>
+                                                    {resource.url}
+                                                    </a>
+                                                ) : (
+                                                    <p
+                                                    key={index}
+                                                            className="block bg-gray-700 text-white rounded-md px-3 py-2 truncate"
+                                                        >
+                                                            {resource.text}
+                                                        </p>
                                             )
-                                        )
-                                    ) : (
-                                        <p className="text-gray-500">
-                                            No resources added
-                                        </p>
-                                    )}
+                                            ))) : (
+                                                <p className="text-white">
+                                                    No resources provided
+                                            </p>
+                                            )}
                                 </div>
                             )}
                         </div>

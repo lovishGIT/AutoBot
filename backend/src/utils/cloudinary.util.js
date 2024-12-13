@@ -2,6 +2,9 @@ import fs from "fs";
 import cloudinary from "../config/cloudinary.config.js";
 
 export const uploadToCloud = async (filePath) => {
+    if(!filePath) {
+        return null;
+    }
     try {
         const result = await cloudinary.uploader.upload(filePath, {
             folder: process.env.CLOUDINARY_FOLDER,
@@ -12,8 +15,12 @@ export const uploadToCloud = async (filePath) => {
     } catch (error) {
         console.error('Error uploading image:', error);
         throw error;
-    } finally {
-        fs.unlinkSync(filePath);
+    }
+    finally {
+        console.log('Deleting file:', filePath);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
     }
 };
 
