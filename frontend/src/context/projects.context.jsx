@@ -46,10 +46,11 @@ export const ProjectProvider = ({ children }) => {
     const fetchProjects = async () => {
         setIsLoading(true);
         setError(null);
+        const token = localStorage.getItem('token');
         try {
             const response = await axios.get(API_BASE_URL, {
                 headers: {
-                    Authorization: `Bearer ${user.token}`,
+                    Authorization: `Bearer ${token}`,
                 },
                 withCredentials: true,
             });
