@@ -6,8 +6,6 @@ const verifyJWT = (req, res, next) => {
 
     const token =
         req?.cookies?.token ||
-        req?.headers['authorization']?.split('Bearer ')?.[1] ||
-        req?.headers['authorization']?.split('Bearer ')?.[0] ||
         req?.headers?.cookie?.split('token=')[1];
 
     if (!token) {

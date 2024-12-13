@@ -23,52 +23,41 @@ export const UserProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setLoading] = useState(false);
 
-    // Check if there's a token in cookies and verify it
-    useEffect(() => {
-        const checkAuthStatus = async () => {
+    // useEffect(() => {
+        // const checkAuthStatus = async () => {
 
-            setLoading(true); // Start session verification
-            const token = Cookies.get('token'); // Retrieve token from cookies
-            // console.log('CheckAuthStatus', token);
-            let headers = {};
-            if (token) {
-                headers = {
-                    Authorization: `Bearer ${token}`,
-                };
-            }
+        //     setLoading(true);
 
-            if (token) {
-                try {
-                    // Send token for verification
-                    const response = await axios.get(
-                        `${API_BASE_URL}/verify`,
-                        {
-                            headers,
-                            withCredentials: true,
-                        }
-                    );
-                    console.log("CheckAuthStatus", response.data);
+        //     if (token) {
+        //         try {
+        //             // Send token for verification
+        //             const response = await axios.get(
+        //                 `${API_BASE_URL}/verify`, {
+        //                     withCredentials: true,
+        //                 }
+        //             );
+        //             console.log("CheckAuthStatus", response.data);
 
-                    if (response.data) {
+        //             if (response.data) {
 
-                        setUser(response.data);
-                        setIsAuthenticated(true);
-                    } else {
-                        setIsAuthenticated(false);
-                    }
-                } catch (error) {
-                    setIsAuthenticated(false);
-                } finally {
-                    setLoading(false);
-                }
-            } else {
-                setIsAuthenticated(false);
-                setLoading(false);
-            }
-        };
+        //                 setUser(response.data);
+        //                 setIsAuthenticated(true);
+        //             } else {
+        //                 setIsAuthenticated(false);
+        //             }
+        //         } catch (error) {
+        //             setIsAuthenticated(false);
+        //         } finally {
+        //             setLoading(false);
+        //         }
+        //     } else {
+        //         setIsAuthenticated(false);
+        //         setLoading(false);
+        //     }
+        // };
 
-        checkAuthStatus();
-    }, []); // Runs once on component mount
+        // checkAuthStatus();
+    // }, []);
 
     const signUp = async (userData) => {
         try {

@@ -103,7 +103,6 @@ export const ProjectProvider = ({ children }) => {
                 projectData,
                 {
                     headers: {
-                        // Authorization: `Bearer ${user.token}`,
                         'Content-Type': 'multipart/form-data'
                     },
                     withCredentials: true,
