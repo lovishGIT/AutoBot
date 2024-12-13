@@ -49,6 +49,9 @@ export const ProjectProvider = ({ children }) => {
         setError(null);
         try {
             const response = await axios.get(API_BASE_URL, {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
                 withCredentials: true,
             });
             console.log('Fetched projects', response.data);

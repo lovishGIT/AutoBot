@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import Cookies from 'js-cookie'; // You can use js-cookie library to easily manage cookies
+import Cookies from 'js-cookie';
 
 // Create the UserContext
 export const UserContext = createContext({
@@ -29,7 +29,13 @@ export const UserProvider = ({ children }) => {
 
             setLoading(true); // Start session verification
             const token = Cookies.get('token'); // Retrieve token from cookies
-            // console.log(token);
+            // console.log('CheckAuthStatus', token);
+            let headers = {};
+            if (token) {
+                headers = {
+                    Authorization: `Bearer ${token}`,
+                };
+            }
 
             if (token) {
                 try {
@@ -37,10 +43,8 @@ export const UserProvider = ({ children }) => {
                     const response = await axios.get(
                         `${API_BASE_URL}/verify`,
                         {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                            withCredentials: true, // Ensure cookies are sent with the request
+                            headers,
+                            withCredentials: true,
                         }
                     );
                     console.log("CheckAuthStatus", response.data);
@@ -71,8 +75,7 @@ export const UserProvider = ({ children }) => {
             setLoading(true);
             const response = await axios.post(
                 `${API_BASE_URL}/register`,
-                userData,
-                {
+                userData, {
                     withCredentials: true, // Ensure cookies are sent with the request
                 }
             );

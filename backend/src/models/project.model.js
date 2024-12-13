@@ -5,8 +5,8 @@ const projectSchema = new Schema(
     {
         name: {
             type: String,
+            required: true,
             trim: true,
-            default: 'Untitled Project',
         },
         owner: {
             type: Schema.Types.ObjectId,
@@ -22,36 +22,41 @@ const projectSchema = new Schema(
             {
                 type: String,
                 trim: true,
-            }
+            },
         ],
         resources: [
             {
-                type: String,
-                trim: true,
-            }
+                url: {
+                    type: String,
+                    trim: true,
+                    required: true,
+                },
+                public_id: {
+                    type: String,
+                    trim: true,
+                    required: true,
+                },
+                _id: false,
+            },
         ],
         status: {
             type: String,
+            lowercase: true,
+            trim: true,
             enum: ['active', 'inactive', 'completed'],
             default: 'active',
         },
-        activities: [
-            {
-                type: String,
-                trim: true,
-            }
-        ],
         tickets: [
             {
                 type: Schema.Types.ObjectId,
                 ref: 'Ticket',
-            }
+            },
         ],
         collaborators: [
             {
                 type: Schema.Types.ObjectId,
                 ref: 'User',
-            }
+            },
         ],
     },
     { timestamps: true }
@@ -59,13 +64,7 @@ const projectSchema = new Schema(
 
 projectSchema.pre('save', async function (next) {
     if (this.isNew && !this.name) {
-        const owner = await User.findById(this.owner);
-        if (!owner) {
-            const err = new Error('Owner not found');
-            return next(err);
-        }
-        const projCount = owner.projects.length;
-        this.name = `Project ${projCount + 1}`;
+        this.name = `Untitled Project ${this._id}`;
     }
     next();
 });

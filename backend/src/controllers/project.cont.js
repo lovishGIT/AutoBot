@@ -1,10 +1,46 @@
 import Project from '../models/project.model.js';
 import User from '../models/user.model.js';
+import {
+    deleteFromCloud,
+    uploadToCloud,
+} from '../utils/cloudinary.util.js';
 
 export const createProject = async (req, res) => {
     try {
-        const { name, description, link, resources, status } =
-            req.body;
+        const { name, description, link, status } = req.body;
+
+        let resources = [];
+        let collaborators = req.body.collaborators || [];
+
+        if (req.files) {
+
+            resources = req.files.map((file) => {
+                return file.path;
+            });
+
+            if (resources) {
+                resources = await Promise.all(
+                    resources.map(
+                        async (resource) =>
+                            await uploadToCloud(resource)
+                    )
+                );
+            } else {
+                resources = [];
+            }
+        }
+
+        if (collaborators) {
+            collaborators = collaborators.trim().split(',');
+            collaborators = await Promise.all(
+                collaborators.map(async (email) => {
+                    const user = await User.findOne({ email });
+                    if (user) {
+                        return user._id;
+                    }
+                })
+            );
+        }
 
         const project = await Project.create({
             owner: req.user._id,
@@ -13,15 +49,16 @@ export const createProject = async (req, res) => {
             link,
             resources,
             status,
+            collaborators,
         });
 
         await User.findByIdAndUpdate(req.user._id, {
             $push: { projects: project._id },
         });
 
-        res.status(201).json(project);
+        return res.status(201).json(project);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -37,9 +74,9 @@ export const getUserProjects = async (req, res) => {
                 .json({ message: 'User not found' });
         }
 
-        res.status(200).json(userDocWithProjects.projects);
+        return res.status(200).json(userDocWithProjects.projects);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -54,22 +91,86 @@ export const getProjectById = async (req, res) => {
 
 export const updateProject = async (req, res) => {
     try {
-        const { description, link, resources, status, activities } =
-            req.body;
+        const { description, link, status } = req.body;
+
+        let resources = [];
+
+        if (req.files) {
+            resources = req.files.map((file) => {
+                return file.path;
+            });
+
+            if (resources) {
+                resources = await Promise.all(
+                    resources.map(async (resource) => {
+                        return await uploadToCloud(resource);
+                    })
+                );
+            } else {
+                resources = [];
+            }
+        }
 
         const project = req.project;
 
         project.description = description || project.description;
         project.link = link || project.link;
-        project.resources = resources || project.resources;
+        project.resources = [...project.resources, ...resources];
+
         project.status = status || project.status;
-        project.activities = activities || project.activities;
 
         const updatedProject = await project.save();
 
-        res.status(200).json(updatedProject);
+        return res.status(200).json(updatedProject);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+export const deleteResources = async (req, res) => {
+    try {
+        const project = req.project;
+        if (!project) {
+            return res
+                .status(404)
+                .json({ message: 'Project not found' });
+        }
+
+        if (!req.body.resources) {
+            return res.status(400).json({
+                message: 'Resource not provided',
+            });
+        }
+        const resources = req.body.resources;
+
+        if (project.owner.toString() !== req.user._id.toString()) {
+            return res.status(403).json({
+                message:
+                    'You are not authorized to delete this resource',
+            });
+        }
+
+        const resourcesToDelete = project.resources.filter((res) =>
+            resources.includes(res.url)
+        );
+
+        project.resources = project.resources.filter(
+            (res) => !resources.includes(res.url)
+        );
+
+        await Promise.all(
+            resourcesToDelete.map(async (resource) => {
+                await deleteFromCloud(resource.public_id);
+            })
+        );
+
+        await project.save();
+
+        return res.status(200).json({
+            message: 'Resource removed successfully',
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -83,10 +184,10 @@ export const deleteProject = async (req, res) => {
 
         await project.deleteOne();
 
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Project removed successfully',
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };

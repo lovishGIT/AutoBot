@@ -30,6 +30,10 @@ This project is an automation tool designed to streamline repetitive tasks and i
     JWT_SECRET= # JWT SECRET
     MONGODB_URI= # MONGODB URI
     CLIENT_URL= # FRONTEND URL
+
+    CLOUDINARY_CLOUD_NAME = # Your cloudinary cloud name
+    CLOUDINARY_API_KEY = # Your cloudinary api key
+    CLOUDINARY_API_SECRET = # Your cloudinary api secret
     ```
 
 4. Install the dependencies:

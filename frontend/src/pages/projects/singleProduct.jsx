@@ -12,7 +12,6 @@ import {
 import { useProject } from '@/context/projects.context';
 import ProjectTickets from '@/components/Project/id/ProjectTickets';
 import { TicketProvider } from '@/context/tickets.context';
-import ProjectActivity from '@/components/Project/ProjectActivity';
 import ProjectSidebar from '@/components/Project/projectSidebar';
 
 const SingleProjectPage = () => {
@@ -323,9 +322,6 @@ const SingleProjectPage = () => {
                         </div>
                     </div>
 
-                    <ProjectActivity
-                        activities={project.activities}
-                    />
                     <ProjectTickets projectId={id} />
                 </div>
             </div>

@@ -25,7 +25,7 @@ const ticketSchema = new Schema(
     {
         title: {
             type: String,
-            required: true,
+            required: [true, 'Ticket title is required'],
             minlength: 3,
         },
         description: {
@@ -33,6 +33,7 @@ const ticketSchema = new Schema(
         },
         collaborators: [{
             type: Schema.Types.ObjectId,
+            ref: 'User'
         }],
         status: {
             type: String,
@@ -42,12 +43,7 @@ const ticketSchema = new Schema(
         priority: {
             type: String,
             enum: ['low', 'medium', 'high'],
-            default: 'medium',
-        },
-        progress: {
-            type: Number,
-            default: 0,
-            max: 100,
+            default: 'low',
         },
         projectId: {
             type: Schema.Types.ObjectId,
