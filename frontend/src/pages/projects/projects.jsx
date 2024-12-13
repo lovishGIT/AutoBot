@@ -7,12 +7,12 @@ import AddProjectPage from './AddProject';
 import SingleProjectPage from './singleProduct';
 
 const UserProjectDashboard = () => {
-    const { user, isLoading } = useContext(UserContext);
+    const { user, isAuthenticated, isLoading } = useContext(UserContext);
     const navigate = useNavigate();
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (!user) {
+        if (!user || !isAuthenticated) {
             setError('You need to login to view projects');
             navigate('/login');
         }

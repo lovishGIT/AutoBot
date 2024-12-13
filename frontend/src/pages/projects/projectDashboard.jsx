@@ -46,11 +46,6 @@ const ProjectDashboard = () => {
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
-    // const progressData = userProjects.map((project) => ({
-    //     name: project.name,
-    //     progress: project.progress,
-    // }));
-
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
 
     const handleBackButton = () => {

@@ -46,12 +46,9 @@ export const ProjectProvider = ({ children }) => {
     const fetchProjects = async () => {
         setIsLoading(true);
         setError(null);
-        const token = localStorage.getItem('token');
+        // const token = localStorage.getItem('token');
         try {
             const response = await axios.get(API_BASE_URL, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
                 withCredentials: true,
             });
             console.log('Fetched projects', response.data);
@@ -63,6 +60,7 @@ export const ProjectProvider = ({ children }) => {
                 err.response?.data?.message ||
                     'Error fetching projects'
             );
+            return null;
         } finally {
             setIsLoading(false);
         }
@@ -105,7 +103,7 @@ export const ProjectProvider = ({ children }) => {
                 projectData,
                 {
                     headers: {
-                        Authorization: `Bearer ${user.token}`,
+                        // Authorization: `Bearer ${user.token}`,
                         'Content-Type': 'multipart/form-data'
                     },
                     withCredentials: true,
