@@ -37,7 +37,7 @@ export const UserProvider = ({ children }) => {
                 };
             }
 
-            // if (token) {
+            if (token) {
                 try {
                     // Send token for verification
                     const response = await axios.get(
@@ -61,10 +61,10 @@ export const UserProvider = ({ children }) => {
                 } finally {
                     setLoading(false);
                 }
-            // } else {
-            //     setIsAuthenticated(false);
-            //     setLoading(false);
-            // }
+            } else {
+                setIsAuthenticated(false);
+                setLoading(false);
+            }
         };
 
         checkAuthStatus();
