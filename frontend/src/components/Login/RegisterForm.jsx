@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
     ArrowRight,
     Lock,
@@ -7,12 +7,12 @@ import {
     Eye,
     EyeOff,
 } from 'lucide-react';
-import { UserContext } from '@/context/user.context';
 import { toast } from 'react-toastify';
+import { useAuth } from '@/hooks/useAuth';
 
 
 const RegisterForm = ({ setError, showPassword, setShowPassword }) => {
-    const { signUp, isLoading } = useContext(UserContext);
+    const { signUp, isLoading } = useAuth();
     const [registerData, setRegisterData] = useState({
         fullName: '',
         email: '',

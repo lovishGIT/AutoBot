@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import LoginForm from '@/components/Login/LoginForm';
 import RegisterForm from '@/components/Login/RegisterForm';
-import { UserContext } from '@/context/user.context';
 import { toast } from 'react-toastify';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Login() {
-    const { isAuthenticated } = useContext(UserContext);
+    const { isAuthenticated } = useAuth();
     const [pastUser, setPastUser] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null);

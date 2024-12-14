@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Clipboard, Plus, X } from 'lucide-react';
 import * as z from 'zod';
 
-import { useTicket } from '@/context/tickets.context';
+import { useTickets } from '@/hooks/useTickets';
 
 // Validation schema for ticket creation
 const ticketSchema = z.object({
@@ -19,7 +19,7 @@ const ticketSchema = z.object({
 });
 
 const ProjectTickets = ({ projectId }) => {
-    const { tickets, isLoading, error, createTicket } = useTicket();
+    const { tickets, isLoading, error, createTicket } = useTickets();
     const [isAddTicketDialogOpen, setIsAddTicketDialogOpen] =
         useState(false);
     const [formErrors, setFormErrors] = useState({});

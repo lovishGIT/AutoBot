@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '@/context/user.context';
 import { ArrowRight } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 const HeroSection = () => {
-    const { user } = useContext(UserContext);
+    const { user } = useAuth();
     useEffect(() => {
         document.title = 'AutoBot | Home';
         if (!user) {

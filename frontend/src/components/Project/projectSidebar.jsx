@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Folder, Briefcase } from 'lucide-react';
-import { ProjectContext } from '@/context/projects.context';
-import { UserContext } from '@/context/user.context';
+import { useAuth } from '@/hooks/useAuth';
+import { useProjects } from '@/hooks/useProject';
 
 const iconMap = {
     folder: Folder,
@@ -39,8 +39,8 @@ const SingleProjectLink = ({ project, Icon }) => {
 
 
 const ProjectSidebar = () => {
-    const { user } = useContext(UserContext);
-    const { projects } = useContext(ProjectContext);
+    const { user } = useAuth();
+    const { projects } = useProjects();
 
     return (
         <div className="w-64 bg-gray-800 text-white p-6 h-screen fixed left-0 top-0 overflow-y-auto">

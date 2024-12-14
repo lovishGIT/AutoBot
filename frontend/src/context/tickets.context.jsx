@@ -1,14 +1,13 @@
 import React, {
     createContext,
     useState,
-    useContext,
     useEffect,
+    useCallback,
 } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { UserContext } from './user.context';
+import { useAuth } from '@/hooks/useAuth';
 
-// Create the TicketContext
 export const TicketContext = createContext({
     tickets: [],
     fetchProjectTickets: () => {},
@@ -28,15 +27,13 @@ export const TicketProvider = ({ projectId, children }) => {
     const [tickets, setTickets] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [ticketsFetched, setTicketsFetched] = useState(false);
 
-    const { user } = useContext(UserContext);
+    const { isAuthenticated } = useAuth();
 
-    // Fetch all project tickets
-    const fetchProjectTickets = async () => {
-        if (!projectId) {
-            setError('No project ID provided');
-            return;
-        }
+    // Memoized fetch tickets function
+    const fetchProjectTickets = useCallback(async () => {
+        if (!projectId || isLoading || ticketsFetched) return;
 
         setIsLoading(true);
         setError(null);
@@ -47,7 +44,7 @@ export const TicketProvider = ({ projectId, children }) => {
             );
 
             setTickets(response.data);
-            return response.data;
+            setTicketsFetched(true);
         } catch (err) {
             console.error('Failed to fetch project tickets', err);
             setError(
@@ -58,7 +55,19 @@ export const TicketProvider = ({ projectId, children }) => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [projectId, isLoading, ticketsFetched]);
+
+    // Fetch tickets when authenticated and project ID exists
+    useEffect(() => {
+        if (isAuthenticated && projectId && !ticketsFetched) {
+            fetchProjectTickets();
+        }
+    }, [
+        isAuthenticated,
+        projectId,
+        ticketsFetched,
+        fetchProjectTickets,
+    ]);
 
     // Get ticket by ID
     const getTicketById = async (ticketId) => {
@@ -197,14 +206,6 @@ export const TicketProvider = ({ projectId, children }) => {
         }
     };
 
-    // Use effect to fetch tickets when component mounts or project ID changes
-    useEffect(() => {
-        if (user && projectId) {
-            fetchProjectTickets();
-        }
-    }, [user, projectId]);
-
-    // Context value
     const contextValue = {
         tickets,
         fetchProjectTickets,
@@ -222,6 +223,3 @@ export const TicketProvider = ({ projectId, children }) => {
         </TicketContext.Provider>
     );
 };
-
-// Hook to use TicketContext
-export const useTicket = () => useContext(TicketContext);

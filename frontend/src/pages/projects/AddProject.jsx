@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useProject } from '@/context/projects.context';
 import { PageHeader } from '@/components/Project/add/projectHeader';
 import { ProjectBasicInfo } from '@/components/Project/add/projectBaseInfo';
 import { ProjectLinkInput } from '@/components/Project/add/projectLinkInput';
 import { ProjectResourcesSection } from '@/components/Project/add/projectResourceSection';
 import { ProjectStatusSelector } from '@/components/Project/add/projectStatusSelector';
+import { useProjects } from '@/hooks/useProject';
 
 const AddProjectPage = () => {
     const navigate = useNavigate();
-    const { createProject } = useProject();
+    const { createProject } = useProjects();
 
     const [projectData, setProjectData] = useState({
         name: '',

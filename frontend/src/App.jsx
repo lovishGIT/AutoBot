@@ -11,6 +11,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { UserProvider } from './context/user.context';
+import ProfilePage from './pages/profile';
+import { ProjectProvider } from './context/projects.context';
 
 function App() {
     return (
@@ -21,13 +23,18 @@ function App() {
                         <Route exact path="/" element={<Home />} />
                         <Route
                             exact
+                            path="/login"
+                            element={<Login />}
+                        />
+                        <Route
+                            exact
                             path="/projects/*"
                             element={<UserProjectDashboard />}
                         />
                         <Route
                             exact
-                            path="/login"
-                            element={<Login />}
+                            path="/profile"
+                            element={<ProfilePage />}
                         />
                         <Route path="/*" element={<NotFound />} />
                     </Routes>

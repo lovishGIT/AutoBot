@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import { UserContext } from '@/context/user.context';
 import { ProjectProvider } from '@/context/projects.context';
 import ProjectDashboard from './projectDashboard';
 import AddProjectPage from './AddProject';
 import SingleProjectPage from './singleProduct';
+import { useAuth } from '@/hooks/useAuth';
 
 const UserProjectDashboard = () => {
-    const { user, isAuthenticated, isLoading } = useContext(UserContext);
+    const { user, isAuthenticated, isLoading } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = useState(null);
 

@@ -1,37 +1,24 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    Tooltip,
-    Legend,
-    PieChart,
-    Pie,
-    Cell,
-} from 'recharts';
-import {
     Folder,
-    CheckCircle,
     Clock,
     Users,
-    TrendingUp,
     Briefcase,
     ArrowLeft,
     Plus,
 } from 'lucide-react';
 import ProjectSidebar from '@/components/Project/projectSidebar';
 import {
-    useProject,
-} from '@/context/projects.context';
-import { UserContext } from '@/context/user.context';
+    useProjects,
+} from '@/hooks/useProject';
+import { useAuth } from '@/hooks/useAuth';
 
 const ProjectDashboard = () => {
-    const { user } = useContext(UserContext);
+    const { user } = useAuth();
     const navigate = useNavigate();
 
-    const { projects, isLoading, error } = useProject();
+    const { projects, isLoading, error } = useProjects();
     const userProjects = useMemo(
         () =>
             projects.filter((project) => project.owner === user._id),
@@ -46,7 +33,7 @@ const ProjectDashboard = () => {
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
-    const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
+    // const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
 
     const handleBackButton = () => {
         navigate('/', {

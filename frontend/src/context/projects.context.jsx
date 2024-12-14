@@ -2,14 +2,14 @@ import React, {
     createContext,
     useState,
     useEffect,
-    useContext,
+    useCallback,
 } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { UserContext } from './user.context';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
-// Create the ProjectContext
 export const ProjectContext = createContext({
     projects: [],
     fetchProjects: () => {},
@@ -29,42 +29,40 @@ export const ProjectProvider = ({ children }) => {
     const [projects, setProjects] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [projectsFetched, setProjectsFetched] = useState(false);
 
-    const { user } = useContext(UserContext);
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (!user) {
-            setError('You need to login to view projects');
-            navigate('/login', { replace: true });
-        } else {
-            fetchProjects();
-        }
-    }, [user]);
+    const { isAuthenticated } = useAuth();
 
+    const fetchProjects = useCallback(async () => {
+        if (isLoading || projectsFetched) return;
 
-    // Fetch all user projects
-    const fetchProjects = async () => {
         setIsLoading(true);
         setError(null);
-        // const token = localStorage.getItem('token');
         try {
             const response = await axios.get(API_BASE_URL, {
                 withCredentials: true,
             });
-            console.log('Fetched projects', response.data);
-
             setProjects(response.data);
+            setProjectsFetched(true);
         } catch (err) {
             console.error('Failed to fetch projects', err);
             setError(
                 err.response?.data?.message ||
                     'Error fetching projects'
             );
+            toast.error('Failed to load projects');
             return null;
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [isLoading, projectsFetched]);
+
+    // Fetch projects when user is authenticated and projects haven't been fetched
+    useEffect(() => {
+        if (isAuthenticated && !projectsFetched) {
+            fetchProjects();
+        }
+    }, [isAuthenticated, projectsFetched, fetchProjects]);
 
     // Fetch project by ID
     const getProjectById = async (id) => {
@@ -103,7 +101,7 @@ export const ProjectProvider = ({ children }) => {
                 projectData,
                 {
                     headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'multipart/form-data',
                     },
                     withCredentials: true,
                 }
@@ -179,7 +177,6 @@ export const ProjectProvider = ({ children }) => {
         }
     };
 
-    // Context value
     const contextValue = {
         projects,
         fetchProjects,
@@ -197,6 +194,3 @@ export const ProjectProvider = ({ children }) => {
         </ProjectContext.Provider>
     );
 };
-
-// Hook to use ProjectContext
-export const useProject = () => useContext(ProjectContext);
