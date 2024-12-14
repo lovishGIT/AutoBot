@@ -76,35 +76,6 @@ const Navbar = () => {
                                 >
                                     Projects
                                 </Link>
-                                {user?.fullName ? (
-                                    <>
-                                        <Link
-                                            to="/profile"
-                                            className="text-gray-300 hover:text-white transition"
-                                            onClick={() =>
-                                                setIsMenuOpen(false)
-                                            }
-                                        >
-                                            Profile
-                                        </Link>
-                                        <button
-                                            onClick={handleSignOut}
-                                            className="text-red-400 hover:text-red-300 transition"
-                                        >
-                                            Sign Out
-                                        </button>
-                                    </>
-                                ) : (
-                                    <Link
-                                        to="/login"
-                                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
-                                        onClick={() =>
-                                            setIsMenuOpen(false)
-                                        }
-                                    >
-                                        Login
-                                    </Link>
-                                )}
                             </div>
                         </div>
                     )}

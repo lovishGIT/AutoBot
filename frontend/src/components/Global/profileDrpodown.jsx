@@ -5,13 +5,13 @@ import { useAuth } from '@/hooks/useAuth';
 
 const ProfileDropdown = ({ setIsMenuOpen }) => {
     const navigate = useNavigate();
-    const { user, logout } = useAuth();
+    const { user, signOutUser } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     const handleSignOut = () => {
-        logout();
-        navigate('/login');
+        signOutUser();
+        navigate('/');
         setIsMenuOpen(false);
     };
 

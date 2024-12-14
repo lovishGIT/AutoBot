@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function ProfileHeader({ isEditing }) {
-    const { user, updateUserProfile, logout } = useAuth();
+    const { user, updateUserProfile, signOutUser } = useAuth();
     const [avatar, setAvatar] = useState(user?.avatar);
 
     const handleAvatarChange = async (e) => {
@@ -32,18 +32,7 @@ export default function ProfileHeader({ isEditing }) {
     };
 
     const handleSignOut = () => {
-        try {
-            logout();
-            toast.success('Signed out successfully', {
-                position: 'top-right',
-                autoClose: 3000,
-            });
-        } catch (error) {
-            toast.error('Failed to sign out', {
-                position: 'top-right',
-                autoClose: 3000,
-            });
-        }
+        signOutUser();
     };
 
     return (
