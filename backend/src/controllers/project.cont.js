@@ -12,12 +12,8 @@ export const createProject = async (req, res) => {
         let resources = [];
         let collaborators = req.body.collaborators || '';
 
-        console.log(req.body, req.files);
-
         if (req.files) {
-            resources = req.files.map((file) => {
-                return file.path;
-            });
+            resources = req.files.map((file) => file.path);
 
             if (resources) {
                 resources = await Promise.all(
@@ -41,7 +37,6 @@ export const createProject = async (req, res) => {
         }
 
         if (collaborators) {
-            console.log("collaborators", collaborators);
 
             collaborators = collaborators.trim().split(',');
             collaborators = await Promise.all(
@@ -104,9 +99,9 @@ export const getUserProjects = async (req, res) => {
 export const getProjectById = async (req, res) => {
     try {
         const project = req.project;
-        res.status(200).json(project);
+        return res.status(200).json(project);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 

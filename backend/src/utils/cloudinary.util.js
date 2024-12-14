@@ -17,7 +17,6 @@ export const uploadToCloud = async (filePath) => {
         throw error;
     }
     finally {
-        console.log('Deleting file:', filePath);
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }

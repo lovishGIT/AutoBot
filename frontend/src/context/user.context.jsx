@@ -23,42 +23,6 @@ export const UserProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setLoading] = useState(false);
 
-    // useEffect(() => {
-        // const checkAuthStatus = async () => {
-
-        //     setLoading(true);
-
-        //     if (token) {
-        //         try {
-        //             // Send token for verification
-        //             const response = await axios.get(
-        //                 `${API_BASE_URL}/verify`, {
-        //                     withCredentials: true,
-        //                 }
-        //             );
-        //             console.log("CheckAuthStatus", response.data);
-
-        //             if (response.data) {
-
-        //                 setUser(response.data);
-        //                 setIsAuthenticated(true);
-        //             } else {
-        //                 setIsAuthenticated(false);
-        //             }
-        //         } catch (error) {
-        //             setIsAuthenticated(false);
-        //         } finally {
-        //             setLoading(false);
-        //         }
-        //     } else {
-        //         setIsAuthenticated(false);
-        //         setLoading(false);
-        //     }
-        // };
-
-        // checkAuthStatus();
-    // }, []);
-
     const signUp = async (userData) => {
         try {
             setLoading(true);

@@ -7,9 +7,6 @@ const HeroSection = () => {
     const { user } = useAuth();
     useEffect(() => {
         document.title = 'AutoBot | Home';
-        if (!user) {
-            console.log('User not found');
-        }
     }, []);
 
     return (
