@@ -12,7 +12,7 @@ const generateToken = (user, res) => {
 
     res.cookie('token', token, {
         httpOnly: true,
-        sameSite: process.env.NODE_ENV === 'none' || 'lax',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         secure: process.env.NODE_ENV === 'production',
         maxAge: 3600000,
     });
