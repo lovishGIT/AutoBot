@@ -29,13 +29,12 @@ export const UserProvider = ({ children }) => {
             const response = await axios.post(
                 `${API_BASE_URL}/register`,
                 userData, {
-                    withCredentials: true, // Ensure cookies are sent with the request
+                    withCredentials: true,
                 }
             );
 
             setUser(response.data);
             setIsAuthenticated(true);
-            // The token is already set as a cookie by the backend, no need to store it manually
 
             toast.success('Successfully registered!');
             return response.data;
@@ -56,14 +55,13 @@ export const UserProvider = ({ children }) => {
                 `${API_BASE_URL}/login`,
                 credentials,
                 {
-                    withCredentials: true, // Ensure cookies are sent with the request
+                    withCredentials: true,
                 }
             );
 
             if (response.data) {
                 setUser(response.data);
                 setIsAuthenticated(true);
-                // The token is already set as a cookie by the backend, no need to store it manually
 
                 toast.success('Successfully logged in!');
                 return response.data;
@@ -78,7 +76,7 @@ export const UserProvider = ({ children }) => {
     };
 
     const signOutUser = () => {
-        Cookies.remove('token'); // Remove token from cookies
+        Cookies.remove('token');
         setUser(null);
         setIsAuthenticated(false);
         toast.info('Logged out successfully');
@@ -89,7 +87,7 @@ export const UserProvider = ({ children }) => {
             const response = await axios.put(
                 `${API_BASE_URL}/update`,
                 updatedData, {
-                    withCredentials: true, // Ensure cookies are sent with the request
+                    withCredentials: true,
                 }
             );
 
