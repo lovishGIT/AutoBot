@@ -5,8 +5,11 @@ const { JWT_SECRET } = process.env;
 const verifyJWT = (req, res, next) => {
 
     const token =
-        req?.cookies?.token ||
-        req?.headers?.cookie?.split('token=')[1];
+        req?.cookies?.token;
+
+    console.log(req.cookies);
+    console.log(req.headers);
+
 
     if (!token) {
         return res.status(401).json({ message: 'No token provided' });

@@ -39,6 +39,8 @@ export const ProjectProvider = ({ children }) => {
         setIsLoading(true);
         setError(null);
         try {
+            console.log(API_BASE_URL);
+
             const response = await axios.get(API_BASE_URL, {
                 withCredentials: true,
             });
