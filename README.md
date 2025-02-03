@@ -22,6 +22,7 @@ This project is an automation tool designed to streamline repetitive tasks and i
     For Frontend:
     ```sh
     VITE_API_URL= # BACKEND API URL
+    NODE_ENV = development
     ```
 
     For Backend:
@@ -34,6 +35,12 @@ This project is an automation tool designed to streamline repetitive tasks and i
     CLOUDINARY_CLOUD_NAME = # Your cloudinary cloud name
     CLOUDINARY_API_KEY = # Your cloudinary api key
     CLOUDINARY_API_SECRET = # Your cloudinary api secret
+
+    CLOUDINARY_FOLDER = # Your cloudinary folder name
+
+    SERVICE_TYPE =  # gmail or ethereal
+    USER_EMAIL = # create a gmail or ethereal service for mails
+    USER_PASSWORD = # get your password
     ```
 
 4. Install the dependencies:

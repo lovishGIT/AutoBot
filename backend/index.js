@@ -23,6 +23,12 @@ app.use("/api/users", userRouter);
 app.use("/api/projects", verifyJWT, projectRouter);
 
 app.get("/", (req, res) => {
+    // sendEmail({
+    //     to: "lovishbansal441@gmail.com",
+    //     subject: "Test Email",
+    //     text: "hello world",
+    //     html: "<strong> hello world </strong>"
+    // });
     res.send("Welcome to Auto bot API");
 });
 

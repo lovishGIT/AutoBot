@@ -12,7 +12,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { UserProvider } from './context/user.context';
 import ProfilePage from './pages/profile';
-import { ProjectProvider } from './context/projects.context';
 
 function App() {
     return (
